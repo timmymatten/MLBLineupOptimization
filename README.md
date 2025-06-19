@@ -53,6 +53,3 @@ The system finds multiple optimal lineups representing different strategies:
 - **Speed-optimized** lineups for stolen base opportunities
 - **Balanced** lineups with good performance across all areas
 
-## 🔬 Built On
-
-Extended from an evolutionary computing framework originally developed for TA-to-lab assignment optimization. The core algorithm handles multi-objective optimization and Pareto-optimal solution finding, while the baseball-specific objectives and lineup modification agents are custom-built for this problem.
