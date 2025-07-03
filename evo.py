@@ -3,6 +3,8 @@ File: evo.py
 Description: An evolutionary computing framework for solving
 multi-objective optimization problems
 
+Used in this project to evolve Major League Baseball lineups.
+
 Finds pareto-optimal solutions revealing tradeoffs between different
 objectives
 
