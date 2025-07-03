@@ -45,11 +45,4 @@ Uses real MLB player statistics:
 - Sprint speed and stolen base success rates
 - Advanced metrics like wOBA and wRC+
 
-## 📈 Results
-
-The system finds multiple optimal lineups representing different strategies:
-- **Power-focused** lineups that maximize run production
-- **Contact-heavy** lineups that minimize strikeouts
-- **Speed-optimized** lineups for stolen base opportunities
-- **Balanced** lineups with good performance across all areas
 
