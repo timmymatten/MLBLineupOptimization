@@ -9,6 +9,7 @@ Determining the optimal batting order is one of the most strategic decisions in 
 ## ⚾ The Problem
 
 Building an optimal batting lineup involves complex trade-offs:
+
 - Do you put your best hitter first or fourth?
 - How do you balance power vs. contact hitters?
 - Where do you place fast runners for stolen base opportunities?
@@ -19,6 +20,7 @@ Traditional approaches rely on manager intuition or simple rules of thumb. This 
 ## 🧬 How It Works
 
 The evolutionary algorithm:
+
 1. **Starts** with random batting lineups
 2. **Evaluates** each lineup across multiple performance objectives
 3. **Evolves** lineups using specialized agents that make strategic changes
@@ -39,10 +41,18 @@ The system optimizes for:
 ## 🗂️ Data Sources
 
 Uses real MLB player statistics:
+
 - Batting averages, on-base percentage, slugging
 - Strikeout and walk rates
 - Performance splits vs. left/right-handed pitching
 - Sprint speed and stolen base success rates
 - Advanced metrics like wOBA and wRC+
 
+## 📈 Results
 
+The system finds multiple optimal lineups representing different strategies:
+
+- **Power-focused** lineups that maximize run production
+- **Contact-heavy** lineups that minimize strikeouts
+- **Speed-optimized** lineups for stolen base opportunities
+- **Balanced** lineups with good performance across all areas

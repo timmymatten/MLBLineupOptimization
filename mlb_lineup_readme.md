@@ -9,38 +9,46 @@ Determining the optimal batting order is one of the most complex strategic decis
 ## ⚾ The Strategic Foundation
 
 ### Batting Order Philosophy
+
 Based on sabermetric research and game theory, the optimal lineup construction follows this strategic framework:
 
 **1st Position - High OBP Leadoff**  
+
 - Primary objective: Get on base to create scoring opportunities
 - Key metric: On-Base Percentage (OBP)
 - Strategy: Sets the table for power hitters behind them
 
 **2nd Position - Best Overall Hitter**  
+
 - Primary objective: Maximum offensive production in high plate appearance slot
 - Key metrics: wOBA (weighted On-Base Average), wRC+ (weighted Runs Created)
 - Strategy: Your best hitter gets the most at-bats here
 
 **3rd Position - Secondary Power/Contact**  
+
 - Primary objective: Solid production with good OBP to support cleanup hitter
 - Key metrics: Balanced OBP and slugging
 - Strategy: Versatile hitter who can drive in runs or set up the cleanup spot
 
 **4th Position - Pure Power**  
+
 - Primary objective: Maximum run production potential
 - Key metrics: Slugging percentage, home runs, RBIs
 - Strategy: Traditional cleanup hitter for driving in baserunners
 
 **5th Position - Contact/Low Strikeouts**  
+
 - Primary objective: Put ball in play, avoid rally-killing strikeouts
 - Key metrics: Low strikeout rate (K%), high contact rate
 - Strategy: Keep the line moving, protect runners
 
 **6th Position - Next Best Available**  
+
 - Primary objective: Secondary offensive production
 - Strategy: Depth scoring threat
 
-**7th-9th Positions - Least Productive**  
+**7th-9th Positions - Least Productive**
+
 - Primary objective: Minimize offensive black holes
 - Strategy: Defensive specialists, pitchers, or weakest offensive players
 
@@ -59,17 +67,20 @@ The system uses a multi-objective evolutionary approach:
 The system optimizes for advanced sabermetric metrics:
 
 ### Primary Offensive Metrics
+
 - **RE24 (Run Expectancy)**: Maximizes expected runs based on base-out situations
 - **wOBA (weighted On-Base Average)**: Comprehensive offensive value metric
 - **wRC (weighted Runs Created)**: Total offensive contribution
 - **wRAA (weighted Runs Above Average)**: Performance relative to league average
 
 ### Strategic Positioning Metrics
+
 - **OBP Optimization**: Ensures high on-base players are positioned for maximum impact
 - **Strikeout Minimization**: Reduces rally-killing strikeouts in key situations
 - **Situational Performance**: Optimizes based on specific game scenarios
 
 ### Advanced Considerations
+
 - **Platoon Advantages**: Left/right-handed batter vs. pitcher matchups
 - **Clutch Performance**: Performance in high-leverage situations
 - **Speed Utilization**: Optimal positioning for stolen base opportunities
@@ -79,16 +90,19 @@ The system optimizes for advanced sabermetric metrics:
 The system can operate at multiple levels of sophistication:
 
 ### Level 1: Overall Statistics
+
 - Season-long performance metrics
 - General offensive capabilities
 - Basic lineup optimization
 
 ### Level 2: Matchup-Specific Analysis
+
 - Performance vs. left-handed/right-handed pitching
 - Team-specific historical performance
 - Ballpark factor adjustments
 
 ### Level 3: Pitcher-Specific Optimization
+
 - Individual pitcher matchup data
 - Pitch type effectiveness
 - Historical head-to-head performance
