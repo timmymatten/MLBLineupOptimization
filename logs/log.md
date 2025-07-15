@@ -81,3 +81,10 @@ solution = {
 - could do the above to accomodate entire roster optimization in the future
 - need to make get roster function in api.py
 - it will take in the team name and the opposing pitcher and produce a dictionary similar to the one above
+- so far so good with the dictionary format
+- api functions are working so far to generate an initial solution
+- try and fix main.py to incorporate new solution format tomorrow
+
+## July 15, 2025 (Day 6)
+
+- fix main.py to incorporate new solution format
