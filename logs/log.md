@@ -93,4 +93,8 @@ solution = {
 - fix main.py to incorporate new solution format
 
 - lineup and roster players have same dict keys
-- the roster (bench) players have placeholders for lineup_postion and defensive_position
+- the roster (bench) players have placeholders for lineup_postion and defensive_positio
+
+## July 16, 2025 (Day 7)
+
+- fix main.py to incorporate new solution format
