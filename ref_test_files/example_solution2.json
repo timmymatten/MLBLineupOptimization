@@ -1,0 +1,236 @@
+{
+    "lineup": [
+        {
+            "name": "Jeff McNeil",
+            "position": "Second Base",
+            "position_code": "4",
+            "jersey_number": "1",
+            "player_id": 643446,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 1,
+            "defensive_position": "Second Base"
+        },
+        {
+            "name": "Mark Vientos",
+            "position": "Third Base",
+            "position_code": "5",
+            "jersey_number": "27",
+            "player_id": 668901,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 2,
+            "defensive_position": "Third Base"
+        },
+        {
+            "name": "Tyrone Taylor",
+            "position": "Outfielder",
+            "position_code": "8",
+            "jersey_number": "15",
+            "player_id": 621438,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 3,
+            "defensive_position": "Center Field"
+        },
+        {
+            "name": "Luis Torrens",
+            "position": "Catcher",
+            "position_code": "2",
+            "jersey_number": "13",
+            "player_id": 620443,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 4,
+            "defensive_position": "Designated Hitter"
+        },
+        {
+            "name": "Pete Alonso",
+            "position": "First Base",
+            "position_code": "3",
+            "jersey_number": "20",
+            "player_id": 624413,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 5,
+            "defensive_position": "First Base"
+        },
+        {
+            "name": "Jared Young",
+            "position": "Outfielder",
+            "position_code": "7",
+            "jersey_number": "29",
+            "player_id": 676724,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 6,
+            "defensive_position": "Left Field"
+        },
+        {
+            "name": "Francisco Lindor",
+            "position": "Shortstop",
+            "position_code": "6",
+            "jersey_number": "12",
+            "player_id": 596019,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 7,
+            "defensive_position": "Shortstop"
+        },
+        {
+            "name": "Juan Soto",
+            "position": "Outfielder",
+            "position_code": "9",
+            "jersey_number": "22",
+            "player_id": 665742,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 8,
+            "defensive_position": "Right Field"
+        },
+        {
+            "name": "Hayden Senger",
+            "position": "Catcher",
+            "position_code": "2",
+            "jersey_number": "30",
+            "player_id": 663584,
+            "status": "Active",
+            "batting_side": "R",
+            "lineup_position": 9,
+            "defensive_position": "Catcher"
+        }
+    ],
+    "available_roster": [
+        {
+            "name": "Brandon Nimmo",
+            "position": "Outfielder",
+            "position_code": "7",
+            "jersey_number": "9",
+            "player_id": 607043,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Brett Baty",
+            "position": "Third Base",
+            "position_code": "5",
+            "jersey_number": "7",
+            "player_id": 683146,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Francisco Lindor",
+            "position": "Shortstop",
+            "position_code": "6",
+            "jersey_number": "12",
+            "player_id": 596019,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Hayden Senger",
+            "position": "Catcher",
+            "position_code": "2",
+            "jersey_number": "30",
+            "player_id": 663584,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Jared Young",
+            "position": "Outfielder",
+            "position_code": "7",
+            "jersey_number": "29",
+            "player_id": 676724,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Jeff McNeil",
+            "position": "Second Base",
+            "position_code": "4",
+            "jersey_number": "1",
+            "player_id": 643446,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Juan Soto",
+            "position": "Outfielder",
+            "position_code": "9",
+            "jersey_number": "22",
+            "player_id": 665742,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Luis Torrens",
+            "position": "Catcher",
+            "position_code": "2",
+            "jersey_number": "13",
+            "player_id": 620443,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Luisangel Acu\u00f1a",
+            "position": "Second Base",
+            "position_code": "4",
+            "jersey_number": "2",
+            "player_id": 682668,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Mark Vientos",
+            "position": "Third Base",
+            "position_code": "5",
+            "jersey_number": "27",
+            "player_id": 668901,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Pete Alonso",
+            "position": "First Base",
+            "position_code": "3",
+            "jersey_number": "20",
+            "player_id": 624413,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Ronny Mauricio",
+            "position": "Third Base",
+            "position_code": "5",
+            "jersey_number": "10",
+            "player_id": 677595,
+            "status": "Active",
+            "batting_side": "R"
+        },
+        {
+            "name": "Tyrone Taylor",
+            "position": "Outfielder",
+            "position_code": "8",
+            "jersey_number": "15",
+            "player_id": 621438,
+            "status": "Active",
+            "batting_side": "R"
+        }
+    ],
+    "opposing_pitcher": {
+        "name": "Zack Wheeler",
+        "throws": "R"
+    },
+    "game_context": {
+        "ballpark": "Citi Field",
+        "weather": "Clear Skies",
+        "inning": 1,
+        "situation": "standard"
+    },
+    "team_info": {
+        "name": "New York Mets",
+        "team_id": 121
+    }
+}
