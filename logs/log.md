@@ -97,4 +97,5 @@ solution = {
 
 ## July 16, 2025 (Day 7)
 
+- ??? change lineup dict to be dict numbered 1-9 instead of a list ???
 - fix main.py to incorporate new solution format
