@@ -81,18 +81,19 @@ class MLBStatsAPI:
             if player['position']['code'] != '1':
                 player_info = {
                     'name': player['person']['fullName'],
-                    'position': player['position']['name'],
+                    'lineup_position': -1,  # Placeholder for lineup position
                     'position_code': player['position']['code'],
                     'jersey_number': player['jerseyNumber'],
                     'player_id': player['person']['id'],
                     'status': player['status']['description'],
-                    'batting_side': 'R'  # Default - you might want to fetch this from player details
+                    'batting_side': 'R',  # Default - you might want to fetch this from player details
+                    'defensive_position': 'Bench'  # Default position, will be updated later
                 }
                 roster.append(player_info)
         
         # Create initial lineup ensuring all defensive positions are filled
         import random
-        
+
         # Define required defensive positions (position codes from MLB API)
         required_positions = {
             '2': 'Catcher',
@@ -104,79 +105,66 @@ class MLBStatsAPI:
             '8': 'Center Field',
             '9': 'Right Field'
         }
-        
+
         lineup = []
         used_players = set()
-        
-        # First, try to fill each defensive position with a player who plays that position
+
+        # Helper to copy all keys from roster player and add/override lineup-specific keys
+        def make_lineup_entry(roster_player, lineup_position, defensive_position):
+            entry = dict(roster_player)  # copy all keys
+            entry['lineup_position'] = lineup_position
+            entry['defensive_position'] = defensive_position
+            return entry
+
+        # Fill defensive positions
         for pos_code, pos_name in required_positions.items():
             available_for_position = [p for p in roster 
-                                    if p['position_code'] == pos_code and p['name'] not in used_players]
-            
+                                      if p['position_code'] == pos_code and p['name'] not in used_players]
             if available_for_position:
                 selected_player = random.choice(available_for_position)
-                lineup_entry = {
-                    'name': selected_player['name'],
-                    'position': selected_player['position'],
-                    'batting_side': selected_player['batting_side'],
-                    'lineup_position': len(lineup) + 1,
-                    'defensive_position': pos_name
-                }
-                lineup.append(lineup_entry)
+                lineup.append(make_lineup_entry(selected_player, len(lineup) + 1, pos_name))
                 used_players.add(selected_player['name'])
             else:
-                # If no player available for this position, use any available player
                 available_players = [p for p in roster if p['name'] not in used_players]
                 if available_players:
                     selected_player = random.choice(available_players)
-                    lineup_entry = {
-                        'name': selected_player['name'],
-                        'position': selected_player['position'],
-                        'batting_side': selected_player['batting_side'],
-                        'lineup_position': len(lineup) + 1,
-                        'defensive_position': pos_name
-                    }
-                    lineup.append(lineup_entry)
+                    lineup.append(make_lineup_entry(selected_player, len(lineup) + 1, pos_name))
                     used_players.add(selected_player['name'])
                 else:
                     # Fill with empty if no players left
-                    lineup_entry = {
+                    empty_player = {
                         'name': '',
                         'position': 'Unknown',
-                        'batting_side': 'R',
-                        'lineup_position': len(lineup) + 1,
-                        'defensive_position': pos_name
+                        'position_code': '',
+                        'jersey_number': '',
+                        'player_id': '',
+                        'status': '',
+                        'batting_side': 'R'
                     }
-                    lineup.append(lineup_entry)
-        
-        # Add DH (9th player) - can be any remaining player
+                    lineup.append(make_lineup_entry(empty_player, len(lineup) + 1, pos_name))
+
+        # Add DH (9th player)
         remaining_players = [p for p in roster if p['name'] not in used_players]
         if remaining_players:
             dh_player = random.choice(remaining_players)
-            dh_entry = {
-                'name': dh_player['name'],
-                'position': dh_player['position'],
-                'batting_side': dh_player['batting_side'],
-                'lineup_position': 9,
-                'defensive_position': 'Designated Hitter'
-            }
-            lineup.append(dh_entry)
+            lineup.append(make_lineup_entry(dh_player, 9, 'Designated Hitter'))
         else:
-            # Fill DH with empty if no players left
-            dh_entry = {
+            empty_player = {
                 'name': '',
                 'position': 'Unknown',
-                'batting_side': 'R',
-                'lineup_position': 9,
-                'defensive_position': 'Designated Hitter'
+                'position_code': '',
+                'jersey_number': '',
+                'player_id': '',
+                'status': '',
+                'batting_side': 'R'
             }
-            lineup.append(dh_entry)
-        
+            lineup.append(make_lineup_entry(empty_player, 9, 'Designated Hitter'))
+
         # Shuffle the batting order while keeping defensive positions assigned
         random.shuffle(lineup)
         for i, player in enumerate(lineup):
             player['lineup_position'] = i + 1
-        
+
         solution = {
             'lineup': lineup,
             'available_roster': roster,
@@ -195,7 +183,7 @@ class MLBStatsAPI:
                 'team_id': roster_data['teamId']
             }
         }
-        
+
         return solution
     
     
@@ -241,7 +229,9 @@ for player in yankees_roster['roster']:
     print(f"{player['person']['fullName']} - {player['position']['name']}")
 
 
-ex_sol = api.init_sol('New York Mets', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
+ex_sol = api.init_sol('Los Angeles Dodgers', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
+with open("ref_test_files/example_solution4.json", "w") as f:
+    json.dump(ex_sol, f, indent=4)
 print('\n')
 
 

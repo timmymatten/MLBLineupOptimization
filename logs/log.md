@@ -87,4 +87,10 @@ solution = {
 
 ## July 15, 2025 (Day 6)
 
+** Tasks
+
+- fix solution dictionary so lineup players and roster players have the same keys
 - fix main.py to incorporate new solution format
+
+- lineup and roster players have same dict keys
+- the roster (bench) players have placeholders for lineup_postion and defensive_position
