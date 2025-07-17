@@ -4,13 +4,20 @@ import pybaseball as pyb
 import pandas as pd
 
 class MLBStatsAPI:
-    def __init__(self):
+    def __init__(self, update=False):
         self.base_url = "https://statsapi.mlb.com/api/v1"
+        self._teams_cache = None
+        self._roster_cache = {}
+        self.update = update
     
     def get_mlb_teams(self):
+        if self._teams_cache is not None and not self.update:
+            # Return cached teams if available and update is not requested
+            return self._teams_cache
         response = requests.get(f"{self.base_url}/teams")
         result = response.json()
         result['teams'] = [team for team in result['teams'] if team.get('sport', {}).get('name') == "Major League Baseball"]
+        self._teams_cache = result
         return result
     
     def get_college_teams(self):
@@ -26,10 +33,23 @@ class MLBStatsAPI:
                 return team['id']
         raise ValueError(f"Team '{team_name}' not found")
     
+    def get_player_id(self, player_name):
+        for team in self.get_mlb_teams()['teams']:
+            roster_data = self.get_roster(team['name'])
+            for player in roster_data['roster']:
+                if player['person']['fullName'].lower() == player_name.lower():
+                    return player['person']['id']
+        raise ValueError(f"Player '{player_name}' not found in any MLB team roster")
+
     def get_roster(self, team):
+        if team in self._roster_cache and not self.update:
+            # Return cached roster if available and update is not requested
+            return self._roster_cache[team]
         team_id = self.get_team_id(team)
         response = requests.get(f"{self.base_url}/teams/{team_id}/roster")
-        return response.json()
+        roster = response.json()
+        self._roster_cache[team] = roster
+        return roster
     
     def get_player_stats_url(self, player_id, season=2025):
         url = f"{self.base_url}/people/{player_id}/stats"
@@ -54,6 +74,16 @@ class MLBStatsAPI:
             raise ValueError(f"Player '{player_name}' not found in stats for {season}")
         return player_row.iloc[0][stat].item()
     
+    def get_handedness(self, player_name, player_type):
+        data = pd.read_csv("data/batting_stats_2025.csv")
+        player_id = self.get_player_id(player_name)
+        if player_type == 'batter':
+            player_row = data[data['batter'] == player_id]
+            return player_row['stand'].iloc[0]
+        elif player_type == 'pitcher':
+            player_row = data[data['pitcher'] == player_id]
+            return player_row['p_throws'].iloc[0]
+    
     def init_sol(self, team_name, opp_pitcher='Unknown', p_throws='R', ballpark='Unknown', weather='Unknown'):
         """
         Initialize a base solution with the starting lineup and roster for a given team.
@@ -73,7 +103,7 @@ class MLBStatsAPI:
         # Get the team roster
         roster_data = self.get_roster(team_name)
         
-        # Extract roster information with batting side (you may need to add this data)
+        # Extract roster information
         # Only include non-pitchers in the roster
         roster = []
         for player in roster_data['roster']:
@@ -86,7 +116,7 @@ class MLBStatsAPI:
                     'jersey_number': player['jerseyNumber'],
                     'player_id': player['person']['id'],
                     'status': player['status']['description'],
-                    'batting_side': 'R',  # Default - you might want to fetch this from player details
+                    'batting_side': self.get_handedness(player['person']['fullName'], 'batter'),
                     'defensive_position': 'Bench'  # Default position, will be updated later
                 }
                 roster.append(player_info)
@@ -139,9 +169,12 @@ class MLBStatsAPI:
                         'jersey_number': '',
                         'player_id': '',
                         'status': '',
-                        'batting_side': 'R'
+                        'batting_side': 'R',
+                        'lineup_position': len(lineup) + 1,
+                        'defensive_position': pos_name
                     }
                     lineup.append(make_lineup_entry(empty_player, len(lineup) + 1, pos_name))
+
 
         # Add DH (9th player)
         remaining_players = [p for p in roster if p['name'] not in used_players]
@@ -156,7 +189,9 @@ class MLBStatsAPI:
                 'jersey_number': '',
                 'player_id': '',
                 'status': '',
-                'batting_side': 'R'
+                'batting_side': 'R',
+                'lineup_position': 9,
+                'defensive_position': 'Designated Hitter'
             }
             lineup.append(make_lineup_entry(empty_player, 9, 'Designated Hitter'))
 
@@ -230,8 +265,10 @@ for player in yankees_roster['roster']:
 
 
 ex_sol = api.init_sol('Los Angeles Dodgers', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
-with open("ref_test_files/example_solution4.json", "w") as f:
+with open("ref_test_files/example_solution5.json", "w") as f:
     json.dump(ex_sol, f, indent=4)
+
 print('\n')
+
 
 
