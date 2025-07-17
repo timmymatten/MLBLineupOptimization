@@ -200,6 +200,9 @@ class MLBStatsAPI:
         for i, player in enumerate(lineup):
             player['lineup_position'] = i + 1
 
+        # Remove players in the starting lineup from the roster group
+        roster = [player for player in roster if player['name'] not in {p['name'] for p in lineup if p['name']}]
+
         solution = {
             'lineup': lineup,
             'available_roster': roster,
@@ -264,8 +267,8 @@ for player in yankees_roster['roster']:
     print(f"{player['person']['fullName']} - {player['position']['name']}")
 
 
-ex_sol = api.init_sol('Los Angeles Dodgers', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
-with open("ref_test_files/example_solution5.json", "w") as f:
+ex_sol = api.init_sol('New York Mets', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
+with open("ref_test_files/example_solution6.json", "w") as f:
     json.dump(ex_sol, f, indent=4)
 
 print('\n')
