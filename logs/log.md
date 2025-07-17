@@ -97,5 +97,12 @@ solution = {
 
 ## July 16, 2025 (Day 7)
 
+** Tasks
+
 - ??? change lineup dict to be dict numbered 1-9 instead of a list ???
+- ^^ might not have to do this, could instead set lineup_position to its index in the list after the switch
 - fix main.py to incorporate new solution format
+
+- created get_handedness() function so the roster didn't have all R as default batting side
+- required a get_player_id()
+- added a simple cache system to help runtime
