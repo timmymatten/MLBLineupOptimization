@@ -90,6 +90,12 @@ class Evo:
         df.sort_values("penalty", inplace=True)
         df.to_csv('timmatten_summary.csv', index=False)
 
+    def get_best_solution(self):
+        if not self.unreduced_pop:
+            return None
+        best_entry = min(self.unreduced_pop.values(), key=lambda x: x["penalty"])
+        return best_entry["solution"]
+
     @profile
     def evolve(self, n=1, dom=50, time_limit=300):
         """ Run n implications of agents """
