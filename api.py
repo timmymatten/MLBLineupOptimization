@@ -3,6 +3,8 @@ import json
 import pybaseball as pyb
 import pandas as pd
 
+from profiler import Profiler, profile
+
 class MLBStatsAPI:
     def __init__(self, update=False):
         self.base_url = "https://statsapi.mlb.com/api/v1"
@@ -41,6 +43,7 @@ class MLBStatsAPI:
                     return player['person']['id']
         raise ValueError(f"Player '{player_name}' not found in any MLB team roster")
 
+    @profile
     def get_roster(self, team):
         if team in self._roster_cache and not self.update:
             # Return cached roster if available and update is not requested
@@ -84,6 +87,7 @@ class MLBStatsAPI:
             player_row = data[data['pitcher'] == player_id]
             return player_row['p_throws'].iloc[0]
     
+    @profile
     def init_sol(self, team_name, opp_pitcher='Unknown', p_throws='R', ballpark='Unknown', weather='Unknown'):
         """
         Initialize a base solution with the starting lineup and roster for a given team.
@@ -240,7 +244,7 @@ class MLBStatsAPI:
 """
     
 # Usage example
-api = MLBStatsAPI()
+api = MLBStatsAPI(update=True)
 
 # Get all teams
 teams = api.get_mlb_teams()
@@ -272,6 +276,10 @@ with open("ref_test_files/example_solution6.json", "w") as f:
     json.dump(ex_sol, f, indent=4)
 
 print('\n')
+
+prof = Profiler()
+prof.report()
+
 
 
 
