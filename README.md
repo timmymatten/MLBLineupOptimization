@@ -17,13 +17,15 @@ This project uses evolutionary algorithms to find optimal MLB starting lineups b
 ## Project Structure
 
 ```
-├── main.py              # Main execution script with objectives and agents
-├── evo.py              # Evolutionary computing framework
-├── api.py              # MLB Stats API integration and data management
-├── profiler.py         # Performance monitoring utilities
-├── best_solution.json  # Output: Optimized lineup result
-├── teams.json          # MLB team data cache
-└── data/               # Statistical data files
+├── main.py                    # Main execution script with objectives and agents
+├── evo.py                     # Evolutionary computing framework
+├── api.py                     # MLB Stats API integration and data management
+├── profiler.py                # Performance monitoring utilities
+├── test_api.py                # API testing and validation
+├── best_solution.json         # Output: Optimized lineup result
+├── data/                      # Statistical data files
+├── logs/                      # Development logs and progress notes
+└── ref_test_files/            # Reference test solutions and examples
 ```
 
 ## Core Components
