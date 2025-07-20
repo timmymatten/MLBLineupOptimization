@@ -49,12 +49,12 @@ Each lineup solution is represented as a comprehensive dictionary containing:
 {
   "lineup": [
     {
-      "name": "Player Name",
+      "name": "Francisco Lindor",
       "lineup_position": 1,
       "position_code": "6",
       "jersey_number": "12",
-      "player_id": 596019,
-      "batting_side": "L",
+      "player_id": 32129,
+      "batting_side": "S",
       "defensive_position": "Shortstop"
     }
   ],
