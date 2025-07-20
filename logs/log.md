@@ -87,7 +87,7 @@ solution = {
 
 ## July 15, 2025 (Day 6)
 
-**Tasks**
+**Tasks*
 
 - fix solution dictionary so lineup players and roster players have the same keys
 - fix main.py to incorporate new solution format
@@ -97,7 +97,7 @@ solution = {
 
 ## July 16, 2025 (Day 7)
 
-**Tasks**
+**Tasks*
 
 - ??? change lineup dict to be dict numbered 1-9 instead of a list ???
 - ^^ might not have to do this, could instead set lineup_position to its index in the list after the switch
@@ -107,8 +107,20 @@ solution = {
 - required a get_player_id()
 - added a simple cache system to help runtime
 
-## July 17, 2025 (Day 7)
+## July 19, 2025 (Day 8)
 
-**Tasks**
+**Tasks*
 
 - fix main.py to incorporate new solution format
+- make init sol faster
+
+- main now works with new dict structure for solutions
+- made main write the best solution to a file
+- had to fix some errors like returning dictionaries rather than list and other dict/list issues
+
+### To-Do
+
+- switch lineup_position in player dict for solutions when swaps occur
+- incorporate the bench players into the lineup
+- make better objectives and agents
+- make init_sol faster
