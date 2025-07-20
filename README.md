@@ -1,58 +1,130 @@
-# ⚾ MLB Lineup Optimization with Evolutionary Computing
+# MLB Lineup Optimization Project
 
-An intelligent system that uses evolutionary computing to optimize Major League Baseball batting lineups by balancing multiple competing objectives.
+A multi-objective evolutionary computing framework for optimizing Major League Baseball starting lineups using real MLB data and advanced sabermetric principles.
 
-## 🎯 Project Overview
+## Project Overview
 
-Determining the optimal batting order is one of the most strategic decisions in baseball. This project applies multi-objective evolutionary optimization to find the best possible batting lineups, considering multiple statistical factors simultaneously rather than relying on traditional intuition-based approaches.
+This project uses evolutionary algorithms to find optimal MLB starting lineups by balancing multiple competing objectives. Rather than simply sorting players by individual statistics, the system considers strategic lineup construction principles like run production cascades, proper leadoff characteristics, and player synergies.
 
-## ⚾ The Problem
+## Key Features
 
-Building an optimal batting lineup involves complex trade-offs:
+- **Multi-Objective Optimization**: Uses Pareto-optimal solutions to reveal tradeoffs between different lineup objectives
+- **Real MLB Data Integration**: Pulls current roster data from MLB's official Stats API
+- **Advanced Sabermetrics**: Incorporates modern baseball analytics beyond traditional statistics
+- **Evolutionary Framework**: Employs genetic algorithm-inspired agents to evolve lineups over time
+- **Performance Profiling**: Built-in performance monitoring to optimize computation efficiency
 
-- Do you put your best hitter first or fourth?
-- How do you balance power vs. contact hitters?
-- Where do you place fast runners for stolen base opportunities?
-- How do you optimize against left-handed vs. right-handed pitching?
+## Project Structure
 
-Traditional approaches rely on manager intuition or simple rules of thumb. This system finds mathematically optimal solutions.
+```
+├── main.py              # Main execution script with objectives and agents
+├── evo.py              # Evolutionary computing framework
+├── api.py              # MLB Stats API integration and data management
+├── profiler.py         # Performance monitoring utilities
+├── best_solution.json  # Output: Optimized lineup result
+├── teams.json          # MLB team data cache
+└── data/               # Statistical data files
+```
 
-## 🧬 How It Works
+## Core Components
 
-The evolutionary algorithm:
+### Objectives (Fitness Functions)
 
-1. **Starts** with random batting lineups
-2. **Evaluates** each lineup across multiple performance objectives
-3. **Evolves** lineups using specialized agents that make strategic changes
-4. **Keeps** the best solutions (Pareto-optimal) that represent different trade-offs
-5. **Continues** improving until the best possible lineups are found
+1. **Run Production Cascade**: Measures how well each batter "sets up" the next batter by calculating OBP × SLG synergies between consecutive lineup positions
+2. **Proper Leadoff**: Evaluates whether the leadoff hitter has sufficient on-base percentage (≥0.350) for optimal table-setting
 
-## 📊 Optimization Objectives
+### Evolutionary Agents
 
-The system optimizes for:
+1. **Swapper**: Randomly exchanges two players in the lineup
+2. **Wasted OBP Agent**: Identifies high on-base players followed by low slugging players and optimizes the pairing
+3. **Wasted SLG Agent**: Finds high power hitters preceded by poor table-setters and improves the sequence
 
-**🏃 Expected Runs**: Maximize run scoring potential using advanced sabermetrics  
-**⚡ Low Strikeouts**: Minimize lineup's overall strikeout rate  
-**👥 On-Base Percentage**: Maximize getting runners on base  
-**🚫 Avoid Double Plays**: Minimize rally-killing double plays  
-**🤝 Platoon Advantage**: Optimize left/right-handed batter vs. pitcher matchups  
-**💨 Speed Placement**: Put fast runners in positions where they can steal bases
+### Solution Format
 
-## 🗂️ Data Sources
+Each lineup solution is represented as a comprehensive dictionary containing:
 
-Uses real MLB player statistics:
+```json
+{
+  "lineup": [
+    {
+      "name": "Player Name",
+      "lineup_position": 1,
+      "position_code": "6",
+      "jersey_number": "12",
+      "player_id": 596019,
+      "batting_side": "L",
+      "defensive_position": "Shortstop"
+    }
+  ],
+  "available_roster": [...],
+  "opposing_pitcher": {
+    "name": "Zack Wheeler",
+    "throws": "R"
+  },
+  "game_context": {
+    "ballpark": "Citi Field",
+    "weather": "Clear",
+    "inning": 1,
+    "situation": "standard"
+  }
+}
+```
 
-- Batting averages, on-base percentage, slugging
-- Strikeout and walk rates
-- Performance splits vs. left/right-handed pitching
-- Sprint speed and stolen base success rates
-- Advanced metrics like wOBA and wRC+
+## Technical Implementation
 
-## 📈 Results
+- **Language**: Python
+- **Key Libraries**: 
+  - `requests` for MLB API integration
+  - `pandas` for statistical data management
+  - `numpy` for numerical computations
+  - `pybaseball` for additional baseball statistics
+- **Optimization Method**: Non-dominated sorting with Pareto frontier analysis
+- **Runtime**: Configurable evolution time (default: 180 seconds)
 
-The system finds multiple optimal lineups representing different strategies:
+## Usage
 
-- **Power-focused** lineups that maximize run production
-- **Contact-heavy** lineups that minimize strikeouts
-- **Speed-optimized** lineups for stolen base opportunities
-- **Balanced** lineups with good performance across all areas
+```python
+# Initialize the evolutionary framework
+E = Evo()
+
+# Add objectives
+E.add_objective("proper_leadoff", proper_leadoff)
+E.add_objective("run_production_cascade", run_production_cascade)
+
+# Register agents
+E.add_agent("swapper", swapper, k=1)
+E.add_agent("wasted_obp_agent", wasted_obp_agent, k=1)
+E.add_agent("wasted_slg_agent", wasted_slg_agent, k=1)
+
+# Generate initial solution and evolve
+sol = api.init_sol('New York Mets', 'Zack Wheeler', 'R', 'Citi Field', 'Clear')
+E.add_solution(sol)
+E.evolve(time_limit=180)
+```
+
+## Current Status
+
+The project has evolved through 8 development iterations, with major milestones including:
+
+- ✅ Basic lineup sorting by batting average
+- ✅ Multi-objective optimization framework
+- ✅ MLB API integration with roster management
+- ✅ Advanced sabermetric objectives (run production cascade)
+- ✅ Dictionary-based solution format for comprehensive lineup representation
+- ✅ Performance profiling and optimization
+
+## Future Enhancements
+
+- **Platoon Advantages**: Incorporate left/right-handed matchup optimization
+- **Bench Integration**: Enable substitutions from available roster players
+- **Additional Objectives**: Expand to include defensive positioning, base-running, and situational hitting
+- **Historical Validation**: Back-test optimized lineups against actual game results
+- **Real-time Integration**: Connect to live game data for in-game optimization
+
+## Academic Context
+
+This project demonstrates the application of evolutionary computing to real-world optimization problems, specifically addressing the complexity of multi-objective decision-making in professional sports analytics. The work bridges computer science, statistics, and sports science domains.
+
+---
+
+*This project is part of ongoing research into multi-objective optimization techniques and their applications in sports analytics.*
