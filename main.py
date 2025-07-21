@@ -8,8 +8,9 @@ from api import MLBStatsAPI
 import random as rnd
 from evo import Evo
 import json
+from profiler import Profiler, profile
 
-api = MLBStatsAPI()
+api = MLBStatsAPI(update=True)
 
 def ba_unsorted(L):
     L = L['lineup']
@@ -81,8 +82,7 @@ def run_production_cascade(L):
     
     return round(penalty, 3)
 
-
-
+@profile
 def swapper(solutions):
     if not solutions:
         return {}
@@ -94,6 +94,7 @@ def swapper(solutions):
     sol['lineup'] = L
     return sol
 
+@profile
 def wasted_obp_agent(solutions):
     """
     Agent: Fix Wasted OBP
@@ -151,6 +152,7 @@ def wasted_obp_agent(solutions):
     sol['lineup'] = lineup
     return sol
 
+@profile
 def wasted_slg_agent(solutions):
     """
     Agent: Fix Wasted SLG
@@ -208,6 +210,7 @@ def wasted_slg_agent(solutions):
     sol['lineup'] = lineup
     return sol
 
+@profile
 def main():
     # Create our Evo instance
     E = Evo()
@@ -222,31 +225,26 @@ def main():
     E.add_agent("wasted_obp_agent", wasted_obp_agent, k=1)
     E.add_agent("wasted_slg_agent", wasted_slg_agent, k=1)
 
-    # Add an initial solution (1-9: lineup, 10: opposing pitcher)
-    """sol = ['Brandon Nimmo',
-           'Francisco Lindor',
-           'Juan Soto',
-           'Pete Alonso',
-           'Jeff McNeil',
-           'Mark Vientos',
-           'Brett Baty',
-           'Luisangel Acuna',
-           'Hayden Senger',
-           'Zack Wheeler'] # 10 spot for opposing pitcher"""
-    
+    # Initialize a starting solution
+    # Example: New York Mets lineup against Zack Wheeler, right-handed pitcher, at Citi Field
     sol = api.init_sol('New York Mets', opp_pitcher='Zack Wheeler', p_throws='R', ballpark='Citi Field', weather='Clear')
 
+    # Add the initial solution to the population
     E.add_solution(sol)
     print(E)
 
+    # Evolve the population for a specified time limit
     E.evolve(time_limit=180)
     print(E)
+
+    # Summarize the final population and save the best solution
     E.summarize()
     best_solution = E.get_best_solution()
     with open("best_solution.json", "w") as f:
         json.dump(best_solution, f, indent=2)
 
 main()
+Profiler.report()  # Report profiling results at the end
 
 
 
