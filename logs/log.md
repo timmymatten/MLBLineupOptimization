@@ -118,7 +118,7 @@ solution = {
 - made main write the best solution to a file
 - had to fix some errors like returning dictionaries rather than list and other dict/list issues
 
-### To-Do
+*To-Do*
 
 - switch lineup_position in player dict for solutions when swaps occur
 - incorporate the bench players into the lineup
@@ -127,4 +127,12 @@ solution = {
 
 ## July 20, 2025 (Day 9)
 
+- eliminated lineup position from the solution dictionary
+- made init_sol faster by making get_player_id faster by not calling get_roster
+- used pybaseball playerid_lookup instead of scraping and searching through team rosters
+- lowered the amount of calls needed to get_roster which was the biggest time waster according to the profiler report
 
+*To-Do*
+
+- incorporate the bench players into the lineup
+- make better objectives and agents
