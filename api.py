@@ -36,6 +36,12 @@ class MLBStatsAPI:
         raise ValueError(f"Team '{team_name}' not found")
     
     def get_player_id(self, player_name):
+        parts = player_name.split()
+        first_name = parts[0]
+        last_name = " ".join(parts[1:])
+        return pyb.playerid_lookup(last_name, first_name)['key_mlbam'].iloc[0] if not pyb.playerid_lookup(last_name, first_name).empty else self._get_player_id_from_roster(player_name)
+
+    def _get_player_id_from_roster(self, player_name):
         for team in self.get_mlb_teams()['teams']:
             roster_data = self.get_roster(team['name'])
             for player in roster_data['roster']:
@@ -69,6 +75,15 @@ class MLBStatsAPI:
             last, first = [part.strip() for part in player_name.split(",")]
             return f"{first} {last}"
         return player_name
+    
+    def unnormalize_name(self, player_name):
+        # Convert "First Last" -> "Last, First"
+        parts = player_name.split()
+        if len(parts) < 2:
+            return player_name
+        first = parts[0]
+        last = " ".join(parts[1:])
+        return f"{last}, {first}"
     
     def get_stats(self, player_name, stat, season=2025):
         data = pd.read_csv("data/batting_stats.csv")
@@ -115,7 +130,6 @@ class MLBStatsAPI:
             if player['position']['code'] != '1':
                 player_info = {
                     'name': player['person']['fullName'],
-                    'lineup_position': -1,  # Placeholder for lineup position
                     'position_code': player['position']['code'],
                     'jersey_number': player['jerseyNumber'],
                     'player_id': player['person']['id'],
@@ -146,7 +160,6 @@ class MLBStatsAPI:
         # Helper to copy all keys from roster player and add/override lineup-specific keys
         def make_lineup_entry(roster_player, lineup_position, defensive_position):
             entry = dict(roster_player)  # copy all keys
-            entry['lineup_position'] = lineup_position
             entry['defensive_position'] = defensive_position
             return entry
 
@@ -174,7 +187,6 @@ class MLBStatsAPI:
                         'player_id': '',
                         'status': '',
                         'batting_side': 'R',
-                        'lineup_position': len(lineup) + 1,
                         'defensive_position': pos_name
                     }
                     lineup.append(make_lineup_entry(empty_player, len(lineup) + 1, pos_name))
@@ -194,15 +206,12 @@ class MLBStatsAPI:
                 'player_id': '',
                 'status': '',
                 'batting_side': 'R',
-                'lineup_position': 9,
                 'defensive_position': 'Designated Hitter'
             }
             lineup.append(make_lineup_entry(empty_player, 9, 'Designated Hitter'))
 
         # Shuffle the batting order while keeping defensive positions assigned
         random.shuffle(lineup)
-        for i, player in enumerate(lineup):
-            player['lineup_position'] = i + 1
 
         # Remove players in the starting lineup from the roster group
         roster = [player for player in roster if player['name'] not in {p['name'] for p in lineup if p['name']}]
@@ -227,59 +236,4 @@ class MLBStatsAPI:
         }
 
         return solution
-    
-    
-
-# ---- Example Usage ----
-
-"""if __name__ == "__main__":
-    api = MLBStatsAPI()
-
-    # Replace with any player name and type
-    player = "Jeff McNeil"
-    stat_type = "batting"  # or "pitching"
-    output = api.get_stats(player_name=player, stat='AVG')
-
-    print(output)
-"""
-    
-# Usage example
-api = MLBStatsAPI(update=True)
-
-# Get all teams
-teams = api.get_mlb_teams()
-with open("teams.json", "w") as f:
-    json.dump(teams, f, indent=4)
-print(f"Found {len(teams['teams'])} teams")
-print("Teams:")
-for team in teams['teams']:
-    print(f"{team['name']} ({team['id']}) - {team['venue']['name']}")
-
-print("\n")
-
-# Get Yankees roster (team ID 147)
-yankees_roster = api.get_roster('Los Angeles Angels')
-print(yankees_roster)
-print('\n')
-print(yankees_roster.keys())
-print(yankees_roster['roster'][0].keys())
-print('\n')
-print(f"Yankees Roster ({len(yankees_roster['roster'])} players):")
-print('\n')
-
-for player in yankees_roster['roster']:
-    print(f"{player['person']['fullName']} - {player['position']['name']}")
-
-
-ex_sol = api.init_sol('New York Mets', 'Zack Wheeler', 'R', 'Citi Field', 'Clear Skies')
-with open("ref_test_files/example_solution6.json", "w") as f:
-    json.dump(ex_sol, f, indent=4)
-
-print('\n')
-
-prof = Profiler()
-prof.report()
-
-
-
-
+ 
