@@ -1,38 +1,7 @@
 {
   "lineup": [
     {
-      "name": "Ronny Mauricio",
-      "lineup_position": 7,
-      "position_code": "5",
-      "jersey_number": "10",
-      "player_id": 677595,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Designated Hitter"
-    },
-    {
-      "name": "Jeff McNeil",
-      "lineup_position": 5,
-      "position_code": "4",
-      "jersey_number": "1",
-      "player_id": 643446,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Second Base"
-    },
-    {
-      "name": "Brandon Nimmo",
-      "lineup_position": 4,
-      "position_code": "7",
-      "jersey_number": "9",
-      "player_id": 607043,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Left Field"
-    },
-    {
       "name": "Francisco Lindor",
-      "lineup_position": 6,
       "position_code": "6",
       "jersey_number": "12",
       "player_id": 596019,
@@ -42,7 +11,6 @@
     },
     {
       "name": "Juan Soto",
-      "lineup_position": 2,
       "position_code": "9",
       "jersey_number": "22",
       "player_id": 665742,
@@ -52,7 +20,6 @@
     },
     {
       "name": "Pete Alonso",
-      "lineup_position": 8,
       "position_code": "3",
       "jersey_number": "20",
       "player_id": 624413,
@@ -61,18 +28,34 @@
       "defensive_position": "First Base"
     },
     {
-      "name": "Brett Baty",
-      "lineup_position": 9,
-      "position_code": "5",
-      "jersey_number": "7",
-      "player_id": 683146,
+      "name": "Brandon Nimmo",
+      "position_code": "7",
+      "jersey_number": "9",
+      "player_id": 607043,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Third Base"
+      "defensive_position": "Designated Hitter"
+    },
+    {
+      "name": "Jeff McNeil",
+      "position_code": "4",
+      "jersey_number": "1",
+      "player_id": 643446,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Second Base"
+    },
+    {
+      "name": "Jared Young",
+      "position_code": "7",
+      "jersey_number": "29",
+      "player_id": 676724,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Left Field"
     },
     {
       "name": "Hayden Senger",
-      "lineup_position": 1,
       "position_code": "2",
       "jersey_number": "30",
       "player_id": 663584,
@@ -82,29 +65,35 @@
     },
     {
       "name": "Tyrone Taylor",
-      "lineup_position": 3,
       "position_code": "8",
       "jersey_number": "15",
       "player_id": 621438,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Center Field"
+    },
+    {
+      "name": "Mark Vientos",
+      "position_code": "5",
+      "jersey_number": "27",
+      "player_id": 668901,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Third Base"
     }
   ],
   "available_roster": [
     {
-      "name": "Jared Young",
-      "lineup_position": -1,
-      "position_code": "7",
-      "jersey_number": "29",
-      "player_id": 676724,
+      "name": "Brett Baty",
+      "position_code": "5",
+      "jersey_number": "7",
+      "player_id": 683146,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Bench"
     },
     {
       "name": "Luis Torrens",
-      "lineup_position": -1,
       "position_code": "2",
       "jersey_number": "13",
       "player_id": 620443,
@@ -114,7 +103,6 @@
     },
     {
       "name": "Luisangel Acu\u00f1a",
-      "lineup_position": -1,
       "position_code": "4",
       "jersey_number": "2",
       "player_id": 682668,
@@ -123,13 +111,12 @@
       "defensive_position": "Bench"
     },
     {
-      "name": "Mark Vientos",
-      "lineup_position": -1,
+      "name": "Ronny Mauricio",
       "position_code": "5",
-      "jersey_number": "27",
-      "player_id": 668901,
+      "jersey_number": "10",
+      "player_id": 677595,
       "status": "Active",
-      "batting_side": "R",
+      "batting_side": "L",
       "defensive_position": "Bench"
     }
   ],
