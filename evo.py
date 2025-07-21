@@ -53,6 +53,7 @@ class Evo:
         self.pop[scores] = sol
         self.unreduced_pop[scores] = entry
 
+    @profile
     def run_agent(self, name):
         """ Execute a named agent """
         op, k = self.agents[name]
@@ -114,6 +115,7 @@ class Evo:
 
         print(self)
         self.remove_dominated()
+        Profiler.report()
 
     def __str__(self):
         """ Displaying the contents of the population """
