@@ -16,6 +16,50 @@ This project uses evolutionary algorithms to find optimal MLB starting lineups b
 - **Evolutionary Framework**: Employs genetic algorithm-inspired agents to evolve lineups over time
 - **Performance Profiling**: Built-in performance monitoring to optimize computation efficiency
 
+### Batting Order Philosophy
+
+Based on sabermetric research and game theory, the optimal lineup construction follows this strategic framework:
+
+**1st Position - High OBP Leadoff**  
+
+- Primary objective: Get on base to create scoring opportunities
+- Key metric: On-Base Percentage (OBP)
+- Strategy: Sets the table for power hitters behind them
+
+**2nd Position - Best Overall Hitter**  
+
+- Primary objective: Maximum offensive production in high plate appearance slot
+- Key metrics: wOBA (weighted On-Base Average), wRC+ (weighted Runs Created)
+- Strategy: Your best hitter gets the most at-bats here
+
+**3rd Position - Secondary Power/Contact**  
+
+- Primary objective: Solid production with good OBP to support cleanup hitter
+- Key metrics: Balanced OBP and slugging
+- Strategy: Versatile hitter who can drive in runs or set up the cleanup spot
+
+**4th Position - Pure Power**  
+
+- Primary objective: Maximum run production potential
+- Key metrics: Slugging percentage, home runs, RBIs
+- Strategy: Traditional cleanup hitter for driving in baserunners
+
+**5th Position - Contact/Low Strikeouts**  
+
+- Primary objective: Put ball in play, avoid rally-killing strikeouts
+- Key metrics: Low strikeout rate (K%), high contact rate
+- Strategy: Keep the line moving, protect runners
+
+**6th Position - Next Best Available**  
+
+- Primary objective: Secondary offensive production
+- Strategy: Depth scoring threat
+
+**7th-9th Positions - Least Productive**
+
+- Primary objective: Minimize offensive black holes
+- Strategy: Defensive specialists, pitchers, or weakest offensive players
+
 ## Project Structure
 
 ```
