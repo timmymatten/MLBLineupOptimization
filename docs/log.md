@@ -136,3 +136,11 @@ solution = {
 
 - incorporate the bench players into the lineup
 - make better objectives and agents
+
+## July 22, 2025 (Day 10)
+
+*Tasks*
+
+- first thing to do is to incorporate bench players into the lineups when looking for replacements in the agents
+- this should be something to get almost perfect before moving on to nbetter objectives and agents
+- make sure each existing agent is able to effectively replace sub-optimal position players with available players off the bench
