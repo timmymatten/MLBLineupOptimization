@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB Lineup Optimization Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+            color: #ffd700;
+            font-size: 1.4em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 14px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lineup-display {
+            grid-column: 1 / -1;
+        }
+
+        .lineup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .player-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .player-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .batting-order {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+        }
+
+        .player-name {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .player-position {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+
+        .player-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            font-size: 0.8em;
+        }
+
+        .stat {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 3px;
+            border-radius: 4px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .evolution-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .evolution-controls input {
+            flex: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .status-message {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .bench-players {
+            margin-top: 20px;
+        }
+
+        .bench-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .bench-player {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .file-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .file-controls button {
+            flex: 1;
+            margin: 0;
+        }
+
+        .player-card.updated {
+            animation: highlightUpdate 2s ease-in-out;
+            border: 2px solid #ffd700;
+        }
+
+        @keyframes highlightUpdate {
+            0% { background: linear-gradient(135deg, #ffd700, #ffed4e); }
+            50% { background: linear-gradient(135deg, #ffd700, #ffed4e); }
+            100% { background: linear-gradient(135deg, #667eea, #764ba2); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .lineup-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .evolution-controls {
+                flex-direction: column;
+            }
+            
+            .file-controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚾ MLB Lineup Optimization Dashboard</h1>
+            <p class="subtitle">Multi-Objective Evolutionary Computing Framework</p>
+        </header>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>🏟️ Game Setup</h2>
+                <div class="form-group">
+                    <label for="teamSelect">Select Team:</label>
+                    <select id="teamSelect">
+                        <option value="">Loading teams...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="pitcherName">Opposing Pitcher:</label>
+                    <input type="text" id="pitcherName" placeholder="e.g., Zack Wheeler" value="Zack Wheeler">
+                </div>
+                
+                <div class="form-group">
+                    <label for="pitcherHand">Pitcher Throws:</label>
+                    <select id="pitcherHand">
+                        <option value="R">Right</option>
+                        <option value="L">Left</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="ballpark">Ballpark:</label>
+                    <input type="text" id="ballpark" placeholder="e.g., Citi Field" value="Citi Field">
+                </div>
+                
+                <div class="form-group">
+                    <label for="weather">Weather:</label>
+                    <select id="weather">
+                        <option value="Clear">Clear</option>
+                        <option value="Overcast">Overcast</option>
+                        <option value="Light Rain">Light Rain</option>
+                        <option value="Windy">Windy</option>
+                    </select>
+                </div>
+                
+                <button onclick="initializeLineup()" id="initBtn">🎯 Generate Initial Lineup</button>
+                
+                <div class="file-controls">
+                    <button onclick="saveLineup()">💾 Save</button>
+                    <button onclick="loadLineup()">📁 Load</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🧬 Evolution Parameters</h2>
+                <div class="evolution-controls">
+                    <div>
+                        <label for="timeLimit">Time Limit (seconds):</label>
+                        <input type="number" id="timeLimit" value="60" min="10" max="600">
+                    </div>
+                    <div>
+                        <label for="dominanceCheck">Dominance Check Interval:</label>
+                        <input type="number" id="dominanceCheck" value="50" min="10" max="200">
+                    </div>
+                </div>
+                
+                <button onclick="startEvolution()" id="evolveBtn" disabled>🚀 Start Evolution</button>
+                <button onclick="stopEvolution()" id="stopBtn" disabled>⏹️ Stop Evolution</button>
+                <button onclick="refreshBestSolution()" id="refreshBtn" disabled>🔄 Load Best Solution</button>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                
+                <div id="statusMessage" class="status-message">Ready to generate initial lineup</div>
+                
+                <div class="chart-container">
+                    <canvas id="evolutionChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card lineup-display">
+            <h2>⚾ Current Optimal Lineup</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="cascadeScore">--</div>
+                    <div class="metric-label">Run Production Cascade</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="leadoffScore">--</div>
+                    <div class="metric-label">Proper Leadoff</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="totalPenalty">--</div>
+                    <div class="metric-label">Total Penalty Score</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="generation">0</div>
+                    <div class="metric-label">Generation</div>
+                </div>
+            </div>
+            
+            <div class="lineup-grid" id="lineupGrid">
+                <!-- Lineup cards will be populated here -->
+            </div>
+            
+            <div class="bench-players">
+                <h3>Available Roster</h3>
+                <div class="bench-grid" id="benchGrid">
+                    <!-- Bench players will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const API_BASE = 'http://localhost:5001/api';
+        
+        // Global variables
+        let currentLineup = null;
+        let evolutionChart = null;
+        let evolutionStatusInterval = null;
+
+        // Initialize the dashboard
+        async function initializeDashboard() {
+            await loadTeams();
+            setupChart();
+        }
+
+        // API helper function
+        async function apiCall(endpoint, method = 'GET', data = null) {
+            try {
+                console.log(`API Call: ${method} ${endpoint}`, data); // Debug logging
+                
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                const result = await response.json();
+                
+                console.log(`API Response:`, result); // Debug logging
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'API call failed');
+                }
+                
+                return result;
+            } catch (error) {
+                console.error('API Error:', error);
+                showStatus(`Error: ${error.message}`, 'error');
+                throw error;
+            }
+        }
+
+        // Test backend connection
+        async function testBackendConnection() {
+            try {
+                const result = await apiCall('/test-data');
+                console.log('Backend test:', result);
+                
+                if (!result.data_file_exists) {
+                    showStatus('Warning: batting_stats.csv not found in data/ folder', 'warning');
+                }
+                
+                return true;
+            } catch (error) {
+                showStatus('Backend connection failed. Please start the Flask server (python app.py)', 'error');
+                return false;
+            }
+        }
+
+        // Load MLB teams from backend
+        async function loadTeams() {
+            try {
+                const result = await apiCall('/teams');
+                const select = document.getElementById('teamSelect');
+                select.innerHTML = '<option value="">Select a team...</option>';
+                
+                result.teams.forEach(team => {
+                    const option = document.createElement('option');
+                    option.value = team.name;
+                    option.textContent = team.name;
+                    select.appendChild(option);
+                });
+                
+                // Pre-select New York Mets as default
+                select.value = "New York Mets";
+            } catch (error) {
+                document.getElementById('teamSelect').innerHTML = '<option value="">Error loading teams</option>';
+            }
+        }
+
+        // Initialize lineup through backend
+        async function initializeLineup() {
+            const teamName = document.getElementById('teamSelect').value;
+            const pitcherName = document.getElementById('pitcherName').value;
+            const pitcherHand = document.getElementById('pitcherHand').value;
+            const ballpark = document.getElementById('ballpark').value;
+            const weather = document.getElementById('weather').value;
+
+            if (!teamName) {
+                alert('Please select a team first');
+                return;
+            }
+
+            console.log('Initializing lineup for:', teamName); // Debug
+
+            document.getElementById('initBtn').disabled = true;
+            showStatus('Generating initial lineup...');
+
+            try {
+                const result = await apiCall('/initialize-lineup', 'POST', {
+                    team_name: teamName,
+                    pitcher_name: pitcherName,
+                    pitcher_throws: pitcherHand,
+                    ballpark: ballpark,
+                    weather: weather
+                });
+
+                console.log('Received lineup result:', result); // Debug
+
+                if (!result.lineup) {
+                    throw new Error('No lineup data received from server');
+                }
+
+                currentLineup = result.lineup;
+                console.log('Current lineup set:', currentLineup); // Debug
+                
+                updateLineupDisplay();
+                
+                if (result.scores) {
+                    updateMetrics(
+                        result.scores.cascade_score,
+                        result.scores.leadoff_score,
+                        result.scores.total_penalty
+                    );
+                }
+                
+                document.getElementById('evolveBtn').disabled = false;
+                showStatus('Initial lineup generated successfully');
+                
+            } catch (error) {
+                console.error('Initialize lineup error:', error);
+                showStatus(`Failed to generate lineup: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('initBtn').disabled = false;
+            }
+        }
+
+        // Start evolution through backend
+        async function startEvolution() {
+            if (!currentLineup) {
+                alert('Please generate an initial lineup first');
+                return;
+            }
+
+            const timeLimit = parseInt(document.getElementById('timeLimit').value);
+            const dominanceCheck = parseInt(document.getElementById('dominanceCheck').value);
+
+            document.getElementById('evolveBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('refreshBtn').disabled = false;
+            showStatus('Starting evolution...');
+
+            try {
+                await apiCall('/start-evolution', 'POST', {
+                    initial_solution: currentLineup,
+                    time_limit: timeLimit,
+                    dominance_check: dominanceCheck
+                });
+
+                // Start polling for evolution status
+                evolutionStatusInterval = setInterval(checkEvolutionStatus, 500);
+                
+            } catch (error) {
+                document.getElementById('evolveBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('refreshBtn').disabled = true;
+                showStatus(`Failed to start evolution: ${error.message}`, 'error');
+            }
+        }
+
+        // Stop evolution
+        async function stopEvolution() {
+            try {
+                await apiCall('/stop-evolution', 'POST');
+                
+                if (evolutionStatusInterval) {
+                    clearInterval(evolutionStatusInterval);
+                    evolutionStatusInterval = null;
+                }
+                
+                document.getElementById('evolveBtn').disabled = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('refreshBtn').disabled = false;
+                showStatus('Evolution stopped');
+                
+                // Load the final best solution
+                setTimeout(refreshBestSolution, 1000);
+                
+            } catch (error) {
+                showStatus(`Failed to stop evolution: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+
+        // Check evolution status
+        async function checkEvolutionStatus() {
+            try {
+                const result = await apiCall('/evolution-status');
+                const status = result.status;
+                
+                // Update progress
+                document.getElementById('progressFill').style.width = `${status.progress * 100}%`;
+                document.getElementById('generation').textContent = status.generation;
+                
+                // Update lineup if there's a new best solution
+                if (status.best_solution) {
+                    // Check if the solution has actually changed
+                    const newSolutionString = JSON.stringify(status.best_solution);
+                    const currentSolutionString = JSON.stringify(currentLineup);
+                    
+                    if (newSolutionString !== currentSolutionString) {
+                        console.log('New best solution detected, updating display');
+                        currentLineup = status.best_solution;
+                        updateLineupDisplay(true); // Highlight changes
+                    }
+                }
+                
+                // Update metrics from latest score
+                if (status.scores_history && status.scores_history.length > 0) {
+                    const latest = status.scores_history[status.scores_history.length - 1];
+                    updateMetrics(latest.cascade_score, latest.leadoff_score, latest.total_penalty);
+                    updateChart(status.scores_history);
+                }
+                
+                // Update status message
+                if (status.running) {
+                    const timeRemaining = Math.max(0, Math.ceil((parseInt(document.getElementById('timeLimit').value) - status.elapsed_time)));
+                    showStatus(`Evolution in progress... Generation ${status.generation} (${timeRemaining}s remaining)`);
+                } else {
+                    showStatus('Evolution completed');
+                    document.getElementById('evolveBtn').disabled = false;
+                    document.getElementById('stopBtn').disabled = true;
+                    clearInterval(evolutionStatusInterval);
+                    evolutionStatusInterval = null;
+                    
+                    // Final lineup update to ensure we have the absolute best solution
+                    if (status.best_solution) {
+                        currentLineup = status.best_solution;
+                        updateLineupDisplay();
+                        showStatus('Evolution completed - lineup updated with best solution');
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Status check error:', error);
+                // Don't show status errors unless evolution fails completely
+                if (error.message.includes('fetch')) {
+                    showStatus('Connection lost to server', 'error');
+                    clearInterval(evolutionStatusInterval);
+                    evolutionStatusInterval = null;
+                }
+            }
+        }
+
+        // Save lineup to file
+        async function saveLineup() {
+            if (!currentLineup) {
+                alert('No lineup to save');
+                return;
+            }
+
+            try {
+                const filename = prompt('Enter filename (without .json):', 'my_optimal_lineup') || 'my_optimal_lineup';
+                const result = await apiCall('/save-lineup', 'POST', {
+                    lineup: currentLineup,
+                    filename: filename
+                });
+                
+                // Show detailed save information
+                const message = `✓ Lineup saved successfully!\n\nFile: ${result.relative_path}\nFull path: ${result.file_path}`;
+                alert(message);
+                showStatus(`Lineup saved to saves/${filename}.json`);
+                
+            } catch (error) {
+                showStatus(`Failed to save lineup: ${error.message}`, 'error');
+            }
+        }
+
+        // Load lineup from file
+        async function loadLineup() {
+            try {
+                const filename = prompt('Enter filename to load:', 'best_solution.json') || 'best_solution.json';
+                const result = await apiCall('/load-lineup', 'POST', {
+                    filename: filename
+                });
+                
+                currentLineup = result.lineup;
+                updateLineupDisplay();
+                document.getElementById('evolveBtn').disabled = false;
+                
+                const message = result.file_path ? 
+                    `Lineup loaded from: ${result.file_path}` : 
+                    `Lineup loaded from ${filename}`;
+                showStatus(message);
+                
+            } catch (error) {
+                showStatus(`Failed to load lineup: ${error.message}`, 'error');
+            }
+        }
+
+        // Update lineup display
+        function updateLineupDisplay(highlightChanges = false) {
+            console.log('Updating lineup display with:', currentLineup); // Debug
+            
+            if (!currentLineup) {
+                console.log('No current lineup to display');
+                return;
+            }
+
+            if (!currentLineup.lineup || !Array.isArray(currentLineup.lineup)) {
+                console.error('Invalid lineup data:', currentLineup);
+                showStatus('Invalid lineup data received', 'error');
+                return;
+            }
+
+            const lineupGrid = document.getElementById('lineupGrid');
+            
+            // Store previous lineup for comparison if highlighting changes
+            const previousPlayers = highlightChanges ? 
+                Array.from(lineupGrid.children).map(card => card.querySelector('.player-name')?.textContent) : 
+                [];
+            
+            lineupGrid.innerHTML = '';
+
+            // Add visual feedback for lineup changes
+            if (highlightChanges) {
+                lineupGrid.classList.add('lineup-changed');
+                setTimeout(() => lineupGrid.classList.remove('lineup-changed'), 3000);
+            }
+
+            currentLineup.lineup.forEach((player, index) => {
+                console.log(`Player ${index + 1}:`, player); // Debug
+                
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-card';
+                
+                // Check if this player position changed
+                const isNewPlayer = highlightChanges && previousPlayers[index] !== player.name;
+                if (isNewPlayer) {
+                    playerCard.classList.add('updated');
+                }
+                
+                const playerName = player.name || 'Unknown Player';
+                const position = player.defensive_position || player.position || 'Unknown Position';
+                const jerseyNumber = player.jersey_number || '--';
+                const battingSide = player.batting_side || '--';
+                const status = player.status || 'Unknown';
+                
+                playerCard.innerHTML = `
+                    <div class="batting-order">${index + 1}</div>
+                    <div class="player-name">${playerName}</div>
+                    <div class="player-position">${position}</div>
+                    <div class="player-stats">
+                        <div class="stat">Side: ${battingSide}</div>
+                        <div class="stat">#${jerseyNumber}</div>
+                        <div class="stat">Status: ${status}</div>
+                    </div>
+                `;
+                
+                lineupGrid.appendChild(playerCard);
+            });
+
+            // Update bench players
+            const benchGrid = document.getElementById('benchGrid');
+            benchGrid.innerHTML = '';
+            
+            if (currentLineup.available_roster && Array.isArray(currentLineup.available_roster)) {
+                console.log('Updating bench with:', currentLineup.available_roster.length, 'players');
+                
+                currentLineup.available_roster.forEach(player => {
+                    const benchCard = document.createElement('div');
+                    benchCard.className = 'bench-player';
+                    
+                    const playerName = player.name || 'Unknown Player';
+                    const position = player.defensive_position || player.position || 'Bench';
+                    const jerseyNumber = player.jersey_number || '--';
+                    const battingSide = player.batting_side || '--';
+                    
+                    benchCard.innerHTML = `
+                        <div><strong>${playerName}</strong></div>
+                        <div>${position}</div>
+                        <div>#${jerseyNumber} (${battingSide})</div>
+                    `;
+                    benchGrid.appendChild(benchCard);
+                });
+            } else {
+                console.log('No bench players available');
+                benchGrid.innerHTML = '<div class="bench-player">No bench players available</div>';
+            }
+        }
+
+        // Update metrics display
+        function updateMetrics(cascade, leadoff, penalty) {
+            document.getElementById('cascadeScore').textContent = cascade.toFixed(3);
+            document.getElementById('leadoffScore').textContent = leadoff;
+            document.getElementById('totalPenalty').textContent = penalty.toFixed(3);
+        }
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            
+            // Add visual feedback based on type
+            switch(type) {
+                case 'error':
+                    statusElement.style.background = 'rgba(255, 0, 0, 0.3)';
+                    statusElement.style.border = '1px solid rgba(255, 0, 0, 0.5)';
+                    break;
+                case 'warning':
+                    statusElement.style.background = 'rgba(255, 165, 0, 0.3)';
+                    statusElement.style.border = '1px solid rgba(255, 165, 0, 0.5)';
+                    break;
+                default:
+                    statusElement.style.background = 'rgba(0, 0, 0, 0.2)';
+                    statusElement.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+            }
+            
+            console.log(`Status: ${message} (${type})`); // Debug logging
+        }
+
+        // Setup evolution chart
+        function setupChart() {
+            const ctx = document.getElementById('evolutionChart').getContext('2d');
+            evolutionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Total Penalty',
+                        data: [],
+                        borderColor: '#ff6b6b',
+                        backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                        fill: true
+                    }, {
+                        label: 'Cascade Score',
+                        data: [],
+                        borderColor: '#4ecdc4',
+                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Generation',
+                                color: '#fff'
+                            },
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Score',
+                                color: '#fff'
+                            },
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#fff' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update evolution chart
+        function updateChart(scoresHistory) {
+            if (!evolutionChart || !scoresHistory) return;
+            
+            const generations = scoresHistory.map(s => s.generation);
+            const penalties = scoresHistory.map(s => s.total_penalty);
+            const cascades = scoresHistory.map(s => s.cascade_score);
+            
+            evolutionChart.data.labels = generations;
+            evolutionChart.data.datasets[0].data = penalties;
+            evolutionChart.data.datasets[1].data = cascades;
+            evolutionChart.update('none');
+        }
+
+        // Refresh with the current best solution
+        async function refreshBestSolution() {
+            try {
+                showStatus('Loading best solution...');
+                const result = await apiCall('/load-lineup', 'POST', {
+                    filename: 'best_solution.json'
+                });
+                
+                if (result.lineup) {
+                    const oldLineup = currentLineup;
+                    currentLineup = result.lineup;
+                    updateLineupDisplay();
+                    
+                    // Recalculate and display current scores
+                    try {
+                        const scoresResult = await apiCall('/calculate-scores', 'POST', {
+                            lineup: currentLineup
+                        });
+                        
+                        if (scoresResult.scores) {
+                            updateMetrics(
+                                scoresResult.scores.cascade_score,
+                                scoresResult.scores.leadoff_score,
+                                scoresResult.scores.total_penalty
+                            );
+                        }
+                    } catch (scoreError) {
+                        console.log('Could not recalculate scores:', scoreError);
+                    }
+                    
+                    showStatus('Best solution loaded and displayed');
+                } else {
+                    showStatus('No best solution found', 'warning');
+                }
+                
+            } catch (error) {
+                showStatus(`Failed to load best solution: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

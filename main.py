@@ -243,8 +243,8 @@ def main():
     with open("best_solution.json", "w") as f:
         json.dump(best_solution, f, indent=2)
 
-main()
-Profiler.report()  # Report profiling results at the end
+"""main()
+Profiler.report()  # Report profiling results at the end"""
 
 
 
