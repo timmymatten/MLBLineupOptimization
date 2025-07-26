@@ -142,7 +142,7 @@ solution = {
 *Tasks*
 
 - first thing to do is to incorporate bench players into the lineups when looking for replacements in the agents
-- this should be something to get almost perfect before moving on to nbetter objectives and agents
+- this should be something to get almost perfect before moving on to better objectives and agents
 - make sure each existing agent is able to effectively replace sub-optimal position players with available players off the bench
 - this could be done by making an overal function that checks for available players in a given group of players...
 - e.g. the function could take in the bench players and check if there is a player worthy of being in the lineup
