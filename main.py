@@ -355,8 +355,8 @@ def main():
     # Initialize a starting solution
     # Example: New York Mets lineup against Zack Wheeler, right-handed pitcher, at Citi Field
     sol = api.init_sol('New York Mets', opp_pitcher='Zack Wheeler', p_throws='R', ballpark='Citi Field', weather='Clear')
-    with open("initial_solution.json", "w") as f:
-        json.dump(sol, f, indent=2)
+    with open("results/initial_solution.json", "w") as f:
+        json.dump(sol, f, indent=2) 
 
     # Add the initial solution to the population
     E.add_solution(sol)
@@ -369,7 +369,7 @@ def main():
     # Summarize the final population and save the best solution
     E.summarize()
     best_solution = E.get_best_solution()
-    with open("best_solution.json", "w") as f:
+    with open("results/best_solution.json", "w") as f:
         json.dump(best_solution, f, indent=2)
 
 main()

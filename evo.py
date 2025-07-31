@@ -89,7 +89,7 @@ class Evo:
 
         df = pd.DataFrame(data)
         df.sort_values("penalty", inplace=True)
-        df.to_csv('timmatten_summary.csv', index=False)
+        df.to_csv('results/evolution_scores.csv', index=False)
 
     def get_best_solution(self):
         if not self.unreduced_pop:
