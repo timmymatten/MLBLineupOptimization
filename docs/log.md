@@ -149,3 +149,6 @@ solution = {
 
 - realized i cn make an agent whose job it is to find better players on the bench
 - easier and more effective than altering the existing agents to do more work than necessary
+
+- created the best_nine objective and better_bench agent
+- organized resulting files to be written to a results directory for organization
