@@ -228,6 +228,8 @@ def main():
     # Initialize a starting solution
     # Example: New York Mets lineup against Zack Wheeler, right-handed pitcher, at Citi Field
     sol = api.init_sol('New York Mets', opp_pitcher='Zack Wheeler', p_throws='R', ballpark='Citi Field', weather='Clear')
+    with open("initial_solution.json", "w") as f:
+        json.dump(sol, f, indent=2)
 
     # Add the initial solution to the population
     E.add_solution(sol)
