@@ -82,6 +82,37 @@ def run_production_cascade(L):
     
     return round(penalty, 3)
 
+def best_nine(L):
+    """
+    Objective function: Best Nine by OPS
+
+    Scores the solution based on whether each lineup player has a higher OPS than any available bench player.
+    Penalty is the sum of (bench OPS - lineup OPS) for each lineup spot where a bench player is better.
+    Score of 0 means every lineup player is better than all bench players by OPS.
+    """
+
+    lineup = L['lineup']
+    bench = L.get('available_roster', [])
+
+    if not bench or len(lineup) != 9:
+        return 0.0
+
+    penalty = 0.0
+    for player in lineup:
+        try:
+            lineup_ops = api.get_stats(player['name'], 'OPS')
+        except (ValueError, KeyError):
+            continue
+        for bench_player in bench:
+            try:
+                bench_ops = api.get_stats(bench_player['name'], 'OPS')
+                if bench_ops > lineup_ops:
+                    penalty += bench_ops - lineup_ops
+            except (ValueError, KeyError):
+                continue
+
+    return round(penalty, 3)
+
 @profile
 def swapper(solutions):
     if not solutions:
@@ -92,6 +123,100 @@ def swapper(solutions):
     j = rnd.randrange(0, len(L))
     L[i], L[j] = L[j], L[i]
     sol['lineup'] = L
+    return sol
+
+@profile
+def better_bench_agent(solutions):
+    """
+    Agent: Better Bench Substitution
+
+    Identifies lineup players who can be replaced by bench players with higher OPS
+    that can play the same defensive position. This agent helps optimize the lineup
+    by utilizing the full roster depth.
+
+    Args:
+        solutions: List of solution dicts (each with 'lineup' and 'available_roster' keys)
+
+    Returns:
+        Modified solution with improved lineup through bench substitution
+    """
+    if not solutions:
+        return {}
+
+    # Deep copy to avoid mutating the original solution
+    sol = copy.deepcopy(solutions[0])
+    lineup = sol['lineup']
+    bench = sol['available_roster']
+
+    if len(lineup) != 9 or not bench:
+        return sol
+
+    # Find substitution opportunities
+    substitution_opportunities = []
+    
+    for lineup_idx, lineup_player in enumerate(lineup):
+        if not lineup_player.get('name'):  # Skip empty lineup spots
+            continue
+            
+        try:
+            lineup_ops = api.get_stats(lineup_player['name'], 'OPS')
+        except (ValueError, KeyError):
+            continue  # Skip if we can't get stats for this player
+        
+        # Find bench players who can play this position and have better OPS
+        current_position = lineup_player.get('position_code')
+        
+        for bench_idx, bench_player in enumerate(bench):
+            if not bench_player.get('name'):  # Skip empty bench spots
+                continue
+                
+            # Check if bench player can play the required position
+            if bench_player.get('position_code') != current_position:
+                continue
+                
+            try:
+                bench_ops = api.get_stats(bench_player['name'], 'OPS')
+                
+                # Check if bench player is significantly better (threshold to avoid marginal swaps)
+                if bench_ops > lineup_ops + 0.025:  # 25 point OPS improvement threshold
+                    improvement = bench_ops - lineup_ops
+                    substitution_opportunities.append({
+                        'lineup_idx': lineup_idx,
+                        'bench_idx': bench_idx,
+                        'improvement': improvement,
+                        'lineup_player': lineup_player,
+                        'bench_player': bench_player
+                    })
+            except (ValueError, KeyError):
+                continue  # Skip if we can't get stats for bench player
+
+    # If no good substitutions found, return original solution
+    if not substitution_opportunities:
+        return sol
+
+    # Sort by improvement and pick the best substitution
+    # This ensures we make the most impactful swap
+    best_substitution = max(substitution_opportunities, key=lambda x: x['improvement'])
+    
+    lineup_idx = best_substitution['lineup_idx']
+    bench_idx = best_substitution['bench_idx']
+    
+    # Create the new bench player entry (formerly in lineup)
+    demoted_player = dict(lineup[lineup_idx])
+    demoted_player['defensive_position'] = 'Bench'
+    
+    # Create the new lineup player entry (formerly on bench)
+    promoted_player = dict(bench[bench_idx])
+    promoted_player['defensive_position'] = lineup[lineup_idx]['defensive_position']
+    
+    # Make the swap
+    lineup[lineup_idx] = promoted_player
+    bench[bench_idx] = demoted_player
+    
+    # Update the solution
+    sol['lineup'] = lineup
+    sol['available_roster'] = bench
+    
     return sol
 
 @profile
@@ -109,7 +234,7 @@ def wasted_obp_agent(solutions):
         Modified lineup with improved OBP→SLG cascade
     """
     if not solutions:
-        return []
+        return {}
 
     # Deep copy to avoid mutating the original solution
     sol = copy.deepcopy(solutions[0])
@@ -219,11 +344,13 @@ def main():
     #E.add_objective("ba_unsorted", ba_unsorted)
     E.add_objective("proper_leadoff", proper_leadoff)
     E.add_objective("run_production_cascade", run_production_cascade)
+    E.add_objective("best_nine", best_nine)
 
     # register agents
     E.add_agent("swapper", swapper, k=1)
     E.add_agent("wasted_obp_agent", wasted_obp_agent, k=1)
     E.add_agent("wasted_slg_agent", wasted_slg_agent, k=1)
+    E.add_agent("better_bench_agent", better_bench_agent, k=1)
 
     # Initialize a starting solution
     # Example: New York Mets lineup against Zack Wheeler, right-handed pitcher, at Citi Field
