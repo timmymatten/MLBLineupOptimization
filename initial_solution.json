@@ -1,15 +1,6 @@
 {
   "lineup": [
     {
-      "name": "Francisco Alvarez",
-      "position_code": "2",
-      "jersey_number": "4",
-      "player_id": 682626,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Catcher"
-    },
-    {
       "name": "Tyrone Taylor",
       "position_code": "8",
       "jersey_number": "15",
@@ -17,6 +8,15 @@
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Center Field"
+    },
+    {
+      "name": "Brandon Nimmo",
+      "position_code": "7",
+      "jersey_number": "9",
+      "player_id": 607043,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Left Field"
     },
     {
       "name": "Luisangel Acu\u00f1a",
@@ -37,15 +37,6 @@
       "defensive_position": "Second Base"
     },
     {
-      "name": "Brandon Nimmo",
-      "position_code": "7",
-      "jersey_number": "9",
-      "player_id": 607043,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Left Field"
-    },
-    {
       "name": "Francisco Lindor",
       "position_code": "6",
       "jersey_number": "12",
@@ -55,13 +46,13 @@
       "defensive_position": "Shortstop"
     },
     {
-      "name": "Juan Soto",
-      "position_code": "9",
-      "jersey_number": "22",
-      "player_id": 665742,
+      "name": "Francisco Alvarez",
+      "position_code": "2",
+      "jersey_number": "4",
+      "player_id": 682626,
       "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Right Field"
+      "batting_side": "R",
+      "defensive_position": "Catcher"
     },
     {
       "name": "Pete Alonso",
@@ -73,13 +64,22 @@
       "defensive_position": "First Base"
     },
     {
-      "name": "Ronny Mauricio",
+      "name": "Brett Baty",
       "position_code": "5",
-      "jersey_number": "10",
-      "player_id": 677595,
+      "jersey_number": "7",
+      "player_id": 683146,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Third Base"
+    },
+    {
+      "name": "Juan Soto",
+      "position_code": "9",
+      "jersey_number": "22",
+      "player_id": 665742,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Right Field"
     }
   ],
   "available_roster": [
@@ -102,10 +102,10 @@
       "defensive_position": "Bench"
     },
     {
-      "name": "Brett Baty",
+      "name": "Ronny Mauricio",
       "position_code": "5",
-      "jersey_number": "7",
-      "player_id": 683146,
+      "jersey_number": "10",
+      "player_id": 677595,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Bench"
