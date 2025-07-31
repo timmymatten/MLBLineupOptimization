@@ -137,7 +137,7 @@ solution = {
 - incorporate the bench players into the lineup
 - make better objectives and agents
 
-## July __, 2025 (Day 10)
+## July 31, 2025 (Day 10)
 
 *Tasks*
 
@@ -146,3 +146,6 @@ solution = {
 - make sure each existing agent is able to effectively replace sub-optimal position players with available players off the bench
 - this could be done by making an overal function that checks for available players in a given group of players...
 - e.g. the function could take in the bench players and check if there is a player worthy of being in the lineup
+
+- realized i cn make an agent whose job it is to find better players on the bench
+- easier and more effective than altering the existing agents to do more work than necessary
