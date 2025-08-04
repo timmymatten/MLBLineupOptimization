@@ -17,6 +17,7 @@ from functools import reduce
 import numpy as np
 import pandas as pd
 from profiler import Profiler, profile
+import matplotlib.pyplot as plt
 
 
 class Evo:
@@ -96,6 +97,42 @@ class Evo:
             return None
         best_entry = min(self.unreduced_pop.values(), key=lambda x: x["penalty"])
         return best_entry["solution"]
+    
+    def get_scores_chart(self):
+
+        if not self.unreduced_pop:
+            print("No data to plot.")
+            return
+
+        df = pd.DataFrame([entry["scores"] for entry in self.unreduced_pop.values()])
+        objectives = list(self.objectives.keys())
+
+        if len(objectives) == 1:
+            plt.figure(figsize=(8, 5))
+            plt.scatter(range(len(df)), df[objectives[0]], alpha=0.7)
+            plt.xlabel("Solution Index")
+            plt.ylabel(objectives[0])
+            plt.title(f"Scores for {objectives[0]}")
+            #plt.show()
+        elif len(objectives) == 2:
+            plt.figure(figsize=(8, 5))
+            plt.scatter(df[objectives[0]], df[objectives[1]], alpha=0.7)
+            plt.xlabel(objectives[0])
+            plt.ylabel(objectives[1])
+            plt.title("Objective Scores Scatter Plot")
+            #plt.show()
+        else:
+            plt.figure(figsize=(10, 6))
+            for obj in objectives:
+                plt.plot(df[obj], marker='o', linestyle='-', label=obj, alpha=0.7)
+                plt.xlabel("Solution Index")
+                plt.ylabel("Score")
+                plt.title("Scores for Each Objective")
+                plt.legend()
+                #plt.show()
+                
+        plt.savefig(f"results/objective_scores_{'_'.join(objectives)}.png")
+        plt.close()
 
     @profile
     def evolve(self, n=1, dom=50, time_limit=300):
