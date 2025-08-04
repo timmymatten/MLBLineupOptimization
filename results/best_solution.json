@@ -10,13 +10,22 @@
       "defensive_position": "Catcher"
     },
     {
-      "name": "Jeff McNeil",
-      "position_code": "4",
-      "jersey_number": "1",
-      "player_id": 643446,
+      "name": "Cedric Mullins",
+      "position_code": "8",
+      "jersey_number": "28",
+      "player_id": 656775,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Second Base"
+      "defensive_position": "Center Field"
+    },
+    {
+      "name": "Francisco Lindor",
+      "position_code": "6",
+      "jersey_number": "12",
+      "player_id": 596019,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Shortstop"
     },
     {
       "name": "Juan Soto",
@@ -37,6 +46,15 @@
       "defensive_position": "First Base"
     },
     {
+      "name": "Jeff McNeil",
+      "position_code": "4",
+      "jersey_number": "1",
+      "player_id": 643446,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Second Base"
+    },
+    {
       "name": "Brandon Nimmo",
       "position_code": "7",
       "jersey_number": "9",
@@ -46,40 +64,22 @@
       "defensive_position": "Left Field"
     },
     {
-      "name": "Ronny Mauricio",
-      "position_code": "5",
-      "jersey_number": "10",
-      "player_id": 677595,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Designated Hitter"
-    },
-    {
-      "name": "Francisco Lindor",
-      "position_code": "6",
-      "jersey_number": "12",
-      "player_id": 596019,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Shortstop"
-    },
-    {
       "name": "Brett Baty",
       "position_code": "5",
       "jersey_number": "7",
       "player_id": 683146,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Third Base"
+      "defensive_position": "Designated Hitter"
     },
     {
-      "name": "Tyrone Taylor",
-      "position_code": "8",
-      "jersey_number": "15",
-      "player_id": 621438,
+      "name": "Ronny Mauricio",
+      "position_code": "5",
+      "jersey_number": "10",
+      "player_id": 677595,
       "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Center Field"
+      "batting_side": "L",
+      "defensive_position": "Third Base"
     }
   ],
   "available_roster": [
@@ -88,6 +88,15 @@
       "position_code": "7",
       "jersey_number": "6",
       "player_id": 516782,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Bench"
+    },
+    {
+      "name": "Mark Vientos",
+      "position_code": "5",
+      "jersey_number": "27",
+      "player_id": 668901,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"
@@ -102,19 +111,10 @@
       "defensive_position": "Bench"
     },
     {
-      "name": "Luisangel Acu\u00f1a",
-      "position_code": "4",
-      "jersey_number": "2",
-      "player_id": 682668,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Bench"
-    },
-    {
-      "name": "Mark Vientos",
-      "position_code": "5",
-      "jersey_number": "27",
-      "player_id": 668901,
+      "name": "Tyrone Taylor",
+      "position_code": "8",
+      "jersey_number": "15",
+      "player_id": 621438,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"

@@ -1,6 +1,42 @@
 {
   "lineup": [
     {
+      "name": "Francisco Alvarez",
+      "position_code": "2",
+      "jersey_number": "4",
+      "player_id": 682626,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Catcher"
+    },
+    {
+      "name": "Cedric Mullins",
+      "position_code": "8",
+      "jersey_number": "28",
+      "player_id": 656775,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Center Field"
+    },
+    {
+      "name": "Juan Soto",
+      "position_code": "9",
+      "jersey_number": "22",
+      "player_id": 665742,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Right Field"
+    },
+    {
+      "name": "Francisco Lindor",
+      "position_code": "6",
+      "jersey_number": "12",
+      "player_id": 596019,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Shortstop"
+    },
+    {
       "name": "Pete Alonso",
       "position_code": "3",
       "jersey_number": "20",
@@ -19,42 +55,6 @@
       "defensive_position": "Second Base"
     },
     {
-      "name": "Tyrone Taylor",
-      "position_code": "8",
-      "jersey_number": "15",
-      "player_id": 621438,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Center Field"
-    },
-    {
-      "name": "Francisco Lindor",
-      "position_code": "6",
-      "jersey_number": "12",
-      "player_id": 596019,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Shortstop"
-    },
-    {
-      "name": "Brett Baty",
-      "position_code": "5",
-      "jersey_number": "7",
-      "player_id": 683146,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Third Base"
-    },
-    {
-      "name": "Francisco Alvarez",
-      "position_code": "2",
-      "jersey_number": "4",
-      "player_id": 682626,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Catcher"
-    },
-    {
       "name": "Starling Marte",
       "position_code": "7",
       "jersey_number": "6",
@@ -64,22 +64,22 @@
       "defensive_position": "Left Field"
     },
     {
+      "name": "Mark Vientos",
+      "position_code": "5",
+      "jersey_number": "27",
+      "player_id": 668901,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Designated Hitter"
+    },
+    {
       "name": "Ronny Mauricio",
       "position_code": "5",
       "jersey_number": "10",
       "player_id": 677595,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Designated Hitter"
-    },
-    {
-      "name": "Juan Soto",
-      "position_code": "9",
-      "jersey_number": "22",
-      "player_id": 665742,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Right Field"
+      "defensive_position": "Third Base"
     }
   ],
   "available_roster": [
@@ -88,6 +88,15 @@
       "position_code": "7",
       "jersey_number": "9",
       "player_id": 607043,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Bench"
+    },
+    {
+      "name": "Brett Baty",
+      "position_code": "5",
+      "jersey_number": "7",
+      "player_id": 683146,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Bench"
@@ -102,19 +111,10 @@
       "defensive_position": "Bench"
     },
     {
-      "name": "Luisangel Acu\u00f1a",
-      "position_code": "4",
-      "jersey_number": "2",
-      "player_id": 682668,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Bench"
-    },
-    {
-      "name": "Mark Vientos",
-      "position_code": "5",
-      "jersey_number": "27",
-      "player_id": 668901,
+      "name": "Tyrone Taylor",
+      "position_code": "8",
+      "jersey_number": "15",
+      "player_id": 621438,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"
