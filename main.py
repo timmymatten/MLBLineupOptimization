@@ -10,7 +10,7 @@ from evo import Evo
 import json
 from profiler import Profiler, profile
 
-api = MLBStatsAPI(update=True)
+api = MLBStatsAPI()
 
 def ba_unsorted(L):
     L = L['lineup']
@@ -80,7 +80,7 @@ def run_production_cascade(L):
     # Return penalty: how far we are from the theoretical maximum
     penalty = max_possible_score - actual_cascade_score
     
-    return round(penalty, 3)
+    return round(penalty, 3) * 10
 
 def best_nine(L):
     """
@@ -371,6 +371,7 @@ def main():
     best_solution = E.get_best_solution()
     with open("results/best_solution.json", "w") as f:
         json.dump(best_solution, f, indent=2)
+    E.get_scores_chart()
 
 main()
 Profiler.report()  # Report profiling results at the end

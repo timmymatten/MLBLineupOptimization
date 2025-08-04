@@ -152,3 +152,20 @@ solution = {
 
 - created the best_nine objective and better_bench agent
 - organized resulting files to be written to a results directory for organization
+
+## August 3, 2025 (Day 11)
+
+*Tasks*
+
+- document score differences from init and final
+- add a chart to results
+
+- added chart to results, to fix/improve later
+
+## August __, 2025 (Day 12)
+
+*Tasks*
+
+- document score differences from init and final
+- improve chart
+- start improving agents and objectives
