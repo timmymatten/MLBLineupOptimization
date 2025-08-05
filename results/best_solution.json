@@ -1,22 +1,13 @@
 {
   "lineup": [
     {
-      "name": "Francisco Alvarez",
-      "position_code": "2",
-      "jersey_number": "4",
-      "player_id": 682626,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Catcher"
-    },
-    {
-      "name": "Jeff McNeil",
-      "position_code": "4",
-      "jersey_number": "1",
-      "player_id": 643446,
+      "name": "Brandon Nimmo",
+      "position_code": "7",
+      "jersey_number": "9",
+      "player_id": 607043,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Second Base"
+      "defensive_position": "Designated Hitter"
     },
     {
       "name": "Juan Soto",
@@ -37,13 +28,22 @@
       "defensive_position": "First Base"
     },
     {
-      "name": "Brandon Nimmo",
-      "position_code": "7",
-      "jersey_number": "9",
-      "player_id": 607043,
+      "name": "Jeff McNeil",
+      "position_code": "4",
+      "jersey_number": "1",
+      "player_id": 643446,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Left Field"
+      "defensive_position": "Second Base"
+    },
+    {
+      "name": "Cedric Mullins",
+      "position_code": "8",
+      "jersey_number": "28",
+      "player_id": 656775,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Center Field"
     },
     {
       "name": "Ronny Mauricio",
@@ -55,6 +55,24 @@
       "defensive_position": "Third Base"
     },
     {
+      "name": "Francisco Alvarez",
+      "position_code": "2",
+      "jersey_number": "4",
+      "player_id": 682626,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Catcher"
+    },
+    {
+      "name": "Starling Marte",
+      "position_code": "7",
+      "jersey_number": "6",
+      "player_id": 516782,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Left Field"
+    },
+    {
       "name": "Francisco Lindor",
       "position_code": "6",
       "jersey_number": "12",
@@ -62,36 +80,9 @@
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Shortstop"
-    },
-    {
-      "name": "Cedric Mullins",
-      "position_code": "8",
-      "jersey_number": "28",
-      "player_id": 656775,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Designated Hitter"
-    },
-    {
-      "name": "Tyrone Taylor",
-      "position_code": "8",
-      "jersey_number": "15",
-      "player_id": 621438,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Center Field"
     }
   ],
   "available_roster": [
-    {
-      "name": "Brett Baty",
-      "position_code": "5",
-      "jersey_number": "7",
-      "player_id": 683146,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Bench"
-    },
     {
       "name": "Luis Torrens",
       "position_code": "2",
@@ -111,10 +102,19 @@
       "defensive_position": "Bench"
     },
     {
-      "name": "Starling Marte",
-      "position_code": "7",
-      "jersey_number": "6",
-      "player_id": 516782,
+      "name": "Brett Baty",
+      "position_code": "5",
+      "jersey_number": "7",
+      "player_id": 683146,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Bench"
+    },
+    {
+      "name": "Tyrone Taylor",
+      "position_code": "8",
+      "jersey_number": "15",
+      "player_id": 621438,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"
