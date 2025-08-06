@@ -162,7 +162,7 @@ solution = {
 
 - added chart to results, to fix/improve later
 
-## August __, 2025 (Day 12)
+## August 5, 2025 (Day 12)
 
 *Tasks*
 
