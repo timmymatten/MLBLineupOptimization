@@ -134,6 +134,39 @@ class Evo:
         plt.savefig(f"results/objective_scores_{'_'.join(objectives)}.png")
         plt.close()
 
+    def document_score_differences(self, initial_solution):
+        """
+        Compares the scores of the initial solution to the best (final) solution
+        for each objective and documents the differences.
+        Saves the results to 'results/score_differences.csv'.
+        """
+        if not self.objectives or not self.unreduced_pop:
+            print("No objectives or solutions to compare.")
+            return
+
+        # Compute initial scores
+        init_scores = {name: f(initial_solution) for name, f in self.objectives.items()}
+
+        # Get best (final) solution and its scores
+        best_solution = self.get_best_solution()
+        if best_solution is None:
+            print("No final solution found.")
+            return
+        final_scores = {name: f(best_solution) for name, f in self.objectives.items()}
+
+        # Compute differences
+        differences = []
+        for name in self.objectives.keys():
+            differences.append({
+                "objective": name,
+                "initial_score": init_scores[name],
+                "final_score": final_scores[name],
+                "difference": final_scores[name] - init_scores[name]
+            })
+
+        df = pd.DataFrame(differences)
+        df.to_csv('results/score_differences.csv', index=False)
+
     @profile
     def evolve(self, n=1, dom=50, time_limit=300):
         """ Run n implications of agents """
