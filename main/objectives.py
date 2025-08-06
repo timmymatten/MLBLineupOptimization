@@ -80,11 +80,11 @@ def run_production_cascade(L):
 
 def best_nine(L):
     """
-    Objective function: Best Nine by OPS
+    Objective function: Best Nine by OPS, position-aware.
 
-    Scores the solution based on whether each lineup player has a higher OPS than any available bench player.
-    Penalty is the sum of (bench OPS - lineup OPS) for each lineup spot where a bench player is better.
-    Score of 0 means every lineup player is better than all bench players by OPS.
+    For each lineup spot, only compare bench players who play the same position.
+    Returns 0 if every lineup player is better than all eligible bench players at their position.
+    Otherwise, returns the sum of (bench OPS - lineup OPS) for each position where a bench player is better.
     """
 
     lineup = L['lineup']
@@ -94,17 +94,21 @@ def best_nine(L):
         return 0.0
 
     penalty = 0.0
-    for player in lineup:
+    for lineup_player in lineup:
+        lineup_pos = lineup_player.get('position')
         try:
-            lineup_ops = api.get_stats(player['name'], 'OPS')
+            lineup_ops = api.get_stats(lineup_player['name'], 'OPS')
         except (ValueError, KeyError):
             continue
+
+        # Only compare bench players who play the same position
         for bench_player in bench:
-            try:
-                bench_ops = api.get_stats(bench_player['name'], 'OPS')
-                if bench_ops > lineup_ops:
-                    penalty += bench_ops - lineup_ops
-            except (ValueError, KeyError):
-                continue
+            if bench_player.get('position') == lineup_pos:
+                try:
+                    bench_ops = api.get_stats(bench_player['name'], 'OPS')
+                    if bench_ops > lineup_ops:
+                        penalty += bench_ops - lineup_ops
+                except (ValueError, KeyError):
+                    continue
 
     return round(penalty, 3)
