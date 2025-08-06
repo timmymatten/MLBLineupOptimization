@@ -1,9 +1,7 @@
 import requests
-import json
 import pybaseball as pyb
 import pandas as pd
-
-from profiler import Profiler, profile
+from profiler import profile
 
 class MLBStatsAPI:
     def __init__(self, update=False):

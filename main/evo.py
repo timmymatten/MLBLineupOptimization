@@ -13,7 +13,6 @@ import copy
 import random as rnd
 import time
 from functools import reduce
-
 import numpy as np
 import pandas as pd
 from profiler import Profiler, profile

@@ -1,9 +1,4 @@
-import copy
 from api import MLBStatsAPI
-import random as rnd
-from evo import Evo
-import json
-from profiler import Profiler, profile
 
 
 api = MLBStatsAPI()
