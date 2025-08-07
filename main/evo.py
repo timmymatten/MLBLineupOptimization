@@ -135,36 +135,50 @@ class Evo:
 
     def document_score_differences(self, initial_solution):
         """
-        Compares the scores of the initial solution to the best (final) solution
-        for each objective and documents the differences.
-        Saves the results to 'results/score_differences.csv'.
+        Compare initial and best solution scores for each objective.
+        Save results to 'results/score_differences.csv'.
         """
         if not self.objectives or not self.unreduced_pop:
             print("No objectives or solutions to compare.")
             return
 
-        # Compute initial scores
+        # Compute scores
         init_scores = {name: f(initial_solution) for name, f in self.objectives.items()}
-
-        # Get best (final) solution and its scores
         best_solution = self.get_best_solution()
         if best_solution is None:
             print("No final solution found.")
             return
         final_scores = {name: f(best_solution) for name, f in self.objectives.items()}
 
-        # Compute differences
+        # Build differences list
         differences = []
-        for name in self.objectives.keys():
+        for name in self.objectives:
+            initial = init_scores[name]
+            final = final_scores[name]
+            diff = final - initial
+            percent = ((diff / abs(initial)) * 100) if initial != 0 else float('nan')
             differences.append({
                 "objective": name,
-                "initial_score": init_scores[name],
-                "final_score": final_scores[name],
-                "difference": final_scores[name] - init_scores[name]
+                "initial_score": initial,
+                "final_score": final,
+                "difference": diff,
+                "percent_difference": percent
             })
 
-        df = pd.DataFrame(differences)
-        df.to_csv('results/score_differences.csv', index=False)
+        # Add total row
+        total_initial = sum(init_scores.values())
+        total_final = sum(final_scores.values())
+        total_diff = total_final - total_initial
+        total_percent = ((total_diff / abs(total_initial)) * 100) if total_initial != 0 else float('nan')
+        differences.append({
+            "objective": "TOTAL",
+            "initial_score": total_initial,
+            "final_score": total_final,
+            "difference": total_diff,
+            "percent_difference": total_percent
+        })
+
+        pd.DataFrame(differences).to_csv('results/score_differences.csv', index=False)
 
     @profile
     def evolve(self, n=1, dom=50, time_limit=300):
