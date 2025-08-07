@@ -59,8 +59,8 @@ def main():
 
     print("Evolution progress:")
 
-    total_time = 180  # seconds
-    interval = 2      # seconds
+    total_time = 60  # seconds
+    interval = 1      # seconds
 
     # Start progress bar thread
     progress_thread = threading.Thread(target=show_progress_bar, args=(total_time, interval))
