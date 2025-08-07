@@ -173,3 +173,12 @@ solution = {
 - organized directory to split up main(), objectives, and agents into separate files
 - added progress bar to see evolution progress
 - improved best_nine() agent to only consider if bench players are better than the lineup player AT THAT POSITION
+
+## August 6, 2025 (Day 13)
+
+*Tasks*
+
+- improve chart
+- start improving agents and objectives
+
+- improved score diff documentation for results
