@@ -1,4 +1,5 @@
-objective,initial_score,final_score,difference
-proper_leadoff,0.0,0.0,0.0
-run_production_cascade,0.34,0.03,-0.31000000000000005
-best_nine,1.28,0.052,-1.228
+objective,initial_score,final_score,difference,percent_difference
+proper_leadoff,0.0,0.0,0.0,
+run_production_cascade,0.43999999999999995,0.07,-0.36999999999999994,-84.09090909090908
+best_nine,1.005,0.425,-0.5799999999999998,-57.71144278606965
+TOTAL,1.4449999999999998,0.495,-0.9499999999999998,-65.7439446366782
