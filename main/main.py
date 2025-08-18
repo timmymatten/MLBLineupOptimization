@@ -68,7 +68,7 @@ def main():
 
     # Initialize a starting solution
     # Example: New York Mets lineup against Zack Wheeler, right-handed pitcher, at Citi Field
-    sol = api.init_sol('New York Yankees', opp_pitcher='Zack Wheeler', p_throws='R', ballpark='Citi Field', weather='Clear')
+    sol = api.init_sol('New York Mets', opp_pitcher='Zack Wheeler', p_throws='R', ballpark='Citi Field', weather='Clear')
     with open("results/initial_solution.json", "w") as f:
         json.dump(sol, f, indent=2) 
 
@@ -78,7 +78,7 @@ def main():
 
     print("Evolution progress:")
 
-    total_time = 60  # seconds
+    total_time = 300  # seconds
     interval = 1      # seconds
 
     # Start progress bar thread
@@ -104,6 +104,7 @@ def main():
     # Generate charts and document score differences
     E.get_scores_chart()
     E.document_score_differences(init_solution)
+    print(f"Total iterations: {E.interations}")
     
 if __name__ == "__main__":
     main()
