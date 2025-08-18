@@ -202,3 +202,7 @@ solution = {
 - create objective function for hitter handedness vs x-handed pitcher
 - create agent for each of those objectives
 
+- created objectives for 1-5 hitters
+- cretaed agents for 1-2 hitters
+
+- seems too hard to get a 0 score for each lineup position
