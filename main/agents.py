@@ -226,3 +226,113 @@ def wasted_slg_agent(solutions):
     # Return the modified lineup (as a list of player dicts)
     sol['lineup'] = lineup
     return sol
+
+def leadoff_agent(solutions):
+    """
+    Agent: Leadoff Hitter Optimization
+
+    Ensures the leadoff hitter has a high enough OBP to set the tone for the lineup.
+    If not, it replaces the leadoff hitter with a better candidate from the roster.
+
+    Args:
+        solutions: List of solution dicts (each with a 'lineup' key)
+
+    Returns:
+        Modified solution with optimized leadoff hitter
+    """
+    if not solutions:
+        return {}
+
+    sol = copy.deepcopy(solutions[0])
+    lineup = sol['lineup']
+
+    if len(lineup) != 9:
+        return sol
+
+    leadoff_hitter = lineup[0]
+    leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
+
+    # Check if the leadoff hitter has a high enough OBP
+    if leadoff_obp >= 0.350:  # Example threshold for a good leadoff hitter
+        return sol  # No change needed
+
+    # Find a better candidate from the roster
+    best_candidate = None
+    best_obp = 0.0
+
+    for player in sol.get('available_roster', []):
+        if player['name'] == leadoff_hitter['name']:
+            continue  # Skip current leadoff hitter
+        try:
+            player_obp = api.get_stats(player['name'], 'OBP')
+            if player_obp > best_obp:
+                best_obp = player_obp
+                best_candidate = player
+        except (ValueError, KeyError):
+            continue  # Skip players with missing stats
+
+    if best_candidate and best_obp > leadoff_obp:
+        # Replace the leadoff hitter with the better candidate
+        lineup[0] = best_candidate
+
+    sol['lineup'] = lineup
+    return sol
+
+def best_hitter_agent(solutions):
+    """
+    Agent: Best Hitter Optimization
+
+    Ensures the 2nd spot in the lineup is occupied by a hitter whose sum of wOBA, wRC+, and OPS exceeds 180.
+    If not, it swaps in the best available hitter meeting this criterion.
+
+    Args:
+        solutions: List of solution dicts (each with a 'lineup' key)
+
+    Returns:
+        Modified solution with qualified hitter in the 2nd spot
+    """
+    if not solutions:
+        return {}
+
+    sol = copy.deepcopy(solutions[0])
+    lineup = sol['lineup']
+
+    if len(lineup) != 9:
+        return sol
+
+    # Compute score for each player: wOBA + wRC+ + OPS
+    player_scores = []
+    for idx, player in enumerate(lineup):
+        try:
+            woba = api.get_stats(player['name'], 'WOBA') * 100
+            wrc_plus = api.get_stats(player['name'], 'WRC')
+            ops = api.get_stats(player['name'], 'OPS') * 100
+            score = woba + wrc_plus + ops
+            player_scores.append((idx, player, score))
+        except (ValueError, KeyError):
+            continue
+
+    # Check if the 2nd spot meets the threshold
+    second_idx = 1
+    second_score = None
+    for idx, player, score in player_scores:
+        if idx == second_idx:
+            second_score = score
+            break
+
+    if second_score is not None and second_score > 180:
+        return sol  # No change needed
+
+    # Find the best available hitter with score > 180
+    qualified = [(idx, player, score) for idx, player, score in player_scores if score > 180 and idx != second_idx]
+    if not qualified:
+        return sol  # No qualified hitter to swap in
+
+    # Pick the best qualified hitter
+    best_idx, best_player, best_score = max(qualified, key=lambda x: x[2])
+
+    # Swap into the 2nd spot
+    lineup[second_idx], lineup[best_idx] = lineup[best_idx], lineup[second_idx]
+
+    sol['lineup'] = lineup
+    return sol
