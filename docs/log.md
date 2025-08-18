@@ -206,3 +206,12 @@ solution = {
 - cretaed agents for 1-2 hitters
 
 - seems too hard to get a 0 score for each lineup position
+- second hitter objective not getting stats
+
+- ONLY 65 ITERATIONS WHEN TIME LIMIT IS 60s (ABOUT 90 SECONDS TOTAL RUNTIME)
+- MUST REDUCE TIME/ITERATION
+
+*To-Do*
+
+- finish lineup position objectives
+- opposing pitcher objectives
