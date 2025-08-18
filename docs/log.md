@@ -191,7 +191,7 @@ solution = {
 
 - planned day 16
 
-## August 12, 2025 (Day 16)
+## August 18, 2025 (Day 16)
 
 *Tasks*
 
@@ -201,3 +201,4 @@ solution = {
 - create objective function for hitter stats vs pitcher
 - create objective function for hitter handedness vs x-handed pitcher
 - create agent for each of those objectives
+
