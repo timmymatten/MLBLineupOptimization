@@ -228,53 +228,48 @@ def wasted_slg_agent(solutions):
     return sol
 
 def leadoff_agent(solutions):
-    """
-    Agent: Leadoff Hitter Optimization
-
-    Ensures the leadoff hitter has a high enough OBP to set the tone for the lineup.
-    If not, it replaces the leadoff hitter with a better candidate from the roster.
-
-    Args:
-        solutions: List of solution dicts (each with a 'lineup' key)
-
-    Returns:
-        Modified solution with optimized leadoff hitter
-    """
+    """More aggressive leadoff optimization"""
     if not solutions:
         return {}
 
     sol = copy.deepcopy(solutions[0])
     lineup = sol['lineup']
-
-    if len(lineup) != 9:
+    
+    current_leadoff = lineup[0]
+    current_obp = api.get_stats(current_leadoff['name'], 'OBP')
+    
+    if current_obp >= 0.350:  # Already good
         return sol
-
-    leadoff_hitter = lineup[0]
-    leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
-
-    # Check if the leadoff hitter has a high enough OBP
-    if leadoff_obp >= 0.350:  # Example threshold for a good leadoff hitter
-        return sol  # No change needed
-
-    # Find a better candidate from the roster
-    best_candidate = None
-    best_obp = 0.0
-
-    for player in sol.get('available_roster', []):
-        if player['name'] == leadoff_hitter['name']:
-            continue  # Skip current leadoff hitter
+    
+    # Find ALL better candidates from entire roster
+    all_candidates = lineup + sol.get('available_roster', [])
+    best_candidates = []
+    
+    for player in all_candidates:
+        if player['name'] == current_leadoff['name']:
+            continue
         try:
             player_obp = api.get_stats(player['name'], 'OBP')
-            if player_obp > best_obp:
-                best_obp = player_obp
-                best_candidate = player
-        except (ValueError, KeyError):
-            continue  # Skip players with missing stats
-
-    if best_candidate and best_obp > leadoff_obp:
-        # Replace the leadoff hitter with the better candidate
-        lineup[0] = best_candidate
-
+            if player_obp >= 0.310:  # Meets threshold
+                best_candidates.append((player, player_obp))
+        except:
+            continue
+    
+    if best_candidates:
+        # Pick the best candidate
+        best_player, _ = max(best_candidates, key=lambda x: x[1])
+        
+        # Find where this player currently is and swap
+        for i, player in enumerate(lineup):
+            if player['name'] == best_player['name']:
+                lineup[0], lineup[i] = lineup[i], lineup[0]
+                break
+        else:
+            # Player is on bench - promote them
+            lineup[0] = best_player
+            # Move current leadoff to bench
+            sol['available_roster'].append(current_leadoff)
+    
     sol['lineup'] = lineup
     return sol
 
