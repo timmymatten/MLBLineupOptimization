@@ -182,3 +182,22 @@ solution = {
 - start improving agents and objectives
 
 - improved score diff documentation for results
+
+## August 10, 2025 (Day 14)
+
+- fiddled with interface possibilities
+
+## August 11, 2025 (Day 15)
+
+- planned day 16
+
+## August 12, 2025 (Day 16)
+
+*Tasks*
+
+- add opposing pitcher consideration into optimization
+- potentially score lineup spots 1-9 rather than the whole lineup
+- create api function to get batter vs hitter stats
+- create objective function for hitter stats vs pitcher
+- create objective function for hitter handedness vs x-handed pitcher
+- create agent for each of those objectives
