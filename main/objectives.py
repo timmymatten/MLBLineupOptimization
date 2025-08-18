@@ -20,7 +20,7 @@ def proper_leadoff(L):
     leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
     
     # Check if the leadoff hitter has a high enough batting average
-    return 1 if leadoff_obp >= 0.350 else 0  # Example threshold for a good leadoff hitter
+    return 0 if leadoff_obp >= 0.310 else 1  # Example threshold for a good leadoff hitter
 
 def run_production_cascade(L):
     """
@@ -107,3 +107,91 @@ def best_nine(L):
                     continue
 
     return round(penalty, 3)
+
+def proper_best_hitter_second(L):
+    lineup = L['lineup']
+
+    # Ensure the second hitter has a sum of wOBA, wRC+, and OPS above a threshold
+    second_hitter = lineup[1]
+    try:
+        woba = api.get_stats(second_hitter['name'], 'WOBA') * 100
+        wrc_plus = api.get_stats(second_hitter['name'], 'WRC')
+        ops = api.get_stats(second_hitter['name'], 'OPS') * 100
+        score = woba + wrc_plus + ops
+    except (ValueError, KeyError):
+        return 1  # Penalize if stats are missing
+
+    THRESHOLD = 180  # Example threshold, adjust as needed
+
+    if score >= THRESHOLD:
+        return 0
+    else:
+        return 1
+    
+def proper_third_hitter(L):
+    lineup = L['lineup']
+
+    # Ensure the third hitter (index 2) has a balanced OBP and SLG
+    third_hitter = lineup[2]
+    try:
+        obp = api.get_stats(third_hitter['name'], 'OBP')
+        slg = api.get_stats(third_hitter['name'], 'SLG')
+    except (ValueError, KeyError):
+        return 1  # Penalize if stats are missing
+
+    # Define what "balanced" means: both above certain thresholds and not too far apart
+    OBP_THRESHOLD = 0.330
+    SLG_THRESHOLD = 0.400
+    MAX_DIFF = 0.070  # OBP and SLG should not differ by more than this
+
+    if obp >= OBP_THRESHOLD and slg >= SLG_THRESHOLD and abs(obp - slg) <= MAX_DIFF:
+        return 0
+    else:
+        return 1
+    
+def proper_cleanup_hitter(L):
+    lineup = L['lineup']
+
+    # Ensure the fourth hitter (index 3) has top 3 SLG on the team or SLG >= .450
+    fourth_hitter = lineup[3]
+    try:
+        fourth_slg = api.get_stats(fourth_hitter['name'], 'SLG')
+    except (ValueError, KeyError):
+        return 1  # Penalize if stats are missing
+
+    # Get all SLG values for the lineup
+    slg_values = []
+    for player in lineup:
+        try:
+            slg = api.get_stats(player['name'], 'SLG')
+            slg_values.append(slg)
+        except (ValueError, KeyError):
+            continue
+
+    # Sort SLG values descending
+    top_slg = sorted(slg_values, reverse=True)[:3]
+
+    if fourth_slg >= 0.450 or fourth_slg in top_slg:
+        return 0
+    else:
+        return 1
+    
+def proper_fifth_hitter(L):
+    lineup = L['lineup']
+
+    # Ensure the fifth hitter (index 4) has a low strikeout percentage and a high contact rate
+    fifth_hitter = lineup[4]
+    try:
+        k_percent = api.get_stats(fifth_hitter['name'], 'K%')
+        contact_rate = api.get_stats(fifth_hitter['name'], 'Contact%')
+    except (ValueError, KeyError):
+        return 1  # Penalize if stats are missing
+
+    # Define thresholds
+    MAX_K_PERCENT = 0.20      # 20% strikeout rate or lower is good
+    MIN_CONTACT_RATE = 0.78   # 78% contact rate or higher is good
+
+    if k_percent <= MAX_K_PERCENT and contact_rate >= MIN_CONTACT_RATE:
+        return 0
+    else:
+        return 1
