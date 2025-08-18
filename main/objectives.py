@@ -14,13 +14,15 @@ def ba_unsorted(L):
 
 def proper_leadoff(L):
     lineup = L['lineup']
-
-    # Check if the first player is a leadoff hitter
     leadoff_hitter = lineup[0]
     leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
     
-    # Check if the leadoff hitter has a high enough batting average
-    return 0 if leadoff_obp >= 0.310 else 1  # Example threshold for a good leadoff hitter
+    if leadoff_obp >= 0.310:
+        return 0
+    else:
+        # Return penalty proportional to how far from ideal
+        penalty = (0.310 - leadoff_obp) * 10  # Scale for visibility
+        return penalty
 
 def run_production_cascade(L):
     """
@@ -110,23 +112,22 @@ def best_nine(L):
 
 def proper_best_hitter_second(L):
     lineup = L['lineup']
-
-    # Ensure the second hitter has a sum of wOBA, wRC+, and OPS above a threshold
     second_hitter = lineup[1]
-    try:
-        woba = api.get_stats(second_hitter['name'], 'WOBA') * 100
-        wrc_plus = api.get_stats(second_hitter['name'], 'WRC')
-        ops = api.get_stats(second_hitter['name'], 'OPS') * 100
-        score = woba + wrc_plus + ops
-    except (ValueError, KeyError):
-        return 1  # Penalize if stats are missing
 
-    THRESHOLD = 180  # Example threshold, adjust as needed
+    woba = api.get_stats(second_hitter['name'], 'wOBA') * 10
+    wrc_plus = api.get_stats(second_hitter['name'], 'wRC+')
+    score = woba + wrc_plus 
+    
+    # League average: wRC+ = 100, wOBA = 0.320
+    # Let's set the threshold as: (wOBA - 0.320) * 1000 + (wRC+ - 100) * 1
+    # This gives equal weight to being above average in both stats.
+    THRESHOLD = 140  # This is the league average "score"
 
     if score >= THRESHOLD:
         return 0
     else:
-        return 1
+        diff = (THRESHOLD - score) / 100
+        return 1 if diff >= 1 else diff  # Return a penalty based on how far below threshold
     
 def proper_third_hitter(L):
     lineup = L['lineup']
@@ -140,14 +141,14 @@ def proper_third_hitter(L):
         return 1  # Penalize if stats are missing
 
     # Define what "balanced" means: both above certain thresholds and not too far apart
-    OBP_THRESHOLD = 0.330
-    SLG_THRESHOLD = 0.400
+    OBP_THRESHOLD = 0.350
+    SLG_THRESHOLD = 0.425
     MAX_DIFF = 0.070  # OBP and SLG should not differ by more than this
 
     if obp >= OBP_THRESHOLD and slg >= SLG_THRESHOLD and abs(obp - slg) <= MAX_DIFF:
         return 0
     else:
-        return 1
+        return max(0, abs(obp - slg) - MAX_DIFF) # Return a penalty based on the sum of OBP and SLG
     
 def proper_cleanup_hitter(L):
     lineup = L['lineup']
@@ -174,7 +175,7 @@ def proper_cleanup_hitter(L):
     if fourth_slg >= 0.450 or fourth_slg in top_slg:
         return 0
     else:
-        return 1
+        return 0.450 - fourth_slg  # Return a penalty based on how far below .450 it is
     
 def proper_fifth_hitter(L):
     lineup = L['lineup']
@@ -194,4 +195,5 @@ def proper_fifth_hitter(L):
     if k_percent <= MAX_K_PERCENT and contact_rate >= MIN_CONTACT_RATE:
         return 0
     else:
-        return 1
+        score = (max(0, k_percent - MAX_K_PERCENT) + max(0, MIN_CONTACT_RATE - contact_rate)) * 10
+        return 1 if score >= 1 else score  # Return a penalty based on how far off the thresholds
