@@ -26,6 +26,7 @@ class Evo:
         self.unreduced_pop = {}
         self.objectives = {} # name --> obj function (goals)
         self.agents = {} # agents: name --> (operator, num_solutions_input)
+        self.interations = 0
 
     def add_objective(self, name, f):
         """ Add an objective (fitness function) to the framework """
@@ -106,31 +107,40 @@ class Evo:
         df = pd.DataFrame([entry["scores"] for entry in self.unreduced_pop.values()])
         objectives = list(self.objectives.keys())
 
+        # Determine step size for x-axis ticks to avoid overcrowding
+        num_points = len(df)
+        max_points = 50  # Maximum points to plot for clarity
+        if num_points > max_points:
+            step = num_points // max_points
+            df = df.iloc[::step].reset_index(drop=True)
+        else:
+            step = 1
+
+        x_vals = range(len(df))
+
         if len(objectives) == 1:
             plt.figure(figsize=(8, 5))
-            plt.scatter(range(len(df)), df[objectives[0]], alpha=0.7)
+            plt.scatter(x_vals, df[objectives[0]], alpha=0.7)
             plt.xlabel("Solution Index")
             plt.ylabel(objectives[0])
             plt.title(f"Scores for {objectives[0]}")
-            #plt.show()
         elif len(objectives) == 2:
             plt.figure(figsize=(8, 5))
             plt.scatter(df[objectives[0]], df[objectives[1]], alpha=0.7)
             plt.xlabel(objectives[0])
             plt.ylabel(objectives[1])
             plt.title("Objective Scores Scatter Plot")
-            #plt.show()
         else:
             plt.figure(figsize=(10, 6))
             for obj in objectives:
-                plt.plot(df[obj], marker='o', linestyle='-', label=obj, alpha=0.7)
-                plt.xlabel("Solution Index")
-                plt.ylabel("Score")
-                plt.title("Scores for Each Objective")
-                plt.legend()
-                #plt.show()
-                
-        plt.savefig(f"results/objective_scores_{'_'.join(objectives)}.png")
+                plt.plot(x_vals, df[obj], marker='o', linestyle='-', label=obj, alpha=0.7)
+            plt.xlabel("Solution Index")
+            plt.ylabel("Score")
+            plt.title("Scores for Each Objective")
+            plt.legend()
+
+        plt.tight_layout()
+        plt.savefig("results/objective_scores_chart.png")
         plt.close()
 
     def document_score_differences(self, initial_solution):
@@ -191,6 +201,7 @@ class Evo:
         while time.time() - start < time_limit:
             pick = rnd.choice(agent_names)
             self.run_agent(pick)
+            self.interations += 1
 
             if i % dom == 0:
                 self.remove_dominated()
