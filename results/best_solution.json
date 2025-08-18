@@ -1,120 +1,120 @@
 {
   "lineup": [
     {
-      "name": "Paul Goldschmidt",
-      "position_code": "3",
-      "jersey_number": "48",
-      "player_id": 502671,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Bench"
-    },
-    {
-      "name": "Ryan McMahon",
-      "position_code": "5",
-      "jersey_number": "19",
-      "player_id": 641857,
+      "name": "Juan Soto",
+      "position_code": "9",
+      "jersey_number": "22",
+      "player_id": 665742,
       "status": "Active",
       "batting_side": "L",
-      "defensive_position": "Third Base"
+      "defensive_position": "Right Field"
     },
     {
-      "name": "Anthony Volpe",
-      "position_code": "6",
-      "jersey_number": "11",
-      "player_id": 683011,
+      "name": "Pete Alonso",
+      "position_code": "3",
+      "jersey_number": "20",
+      "player_id": 624413,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "First Base"
+    },
+    {
+      "name": "Starling Marte",
+      "position_code": "7",
+      "jersey_number": "6",
+      "player_id": 516782,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Designated Hitter"
     },
     {
-      "name": "Aaron Judge",
-      "position_code": "9",
-      "jersey_number": "99",
-      "player_id": 592450,
-      "status": "Active",
-      "batting_side": "R",
-      "defensive_position": "Right Field"
-    },
-    {
-      "name": "Jazz Chisholm Jr.",
-      "position_code": "4",
-      "jersey_number": "13",
-      "player_id": 665862,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Second Base"
-    },
-    {
-      "name": "Trent Grisham",
-      "position_code": "8",
-      "jersey_number": "12",
-      "player_id": 663757,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Center Field"
-    },
-    {
-      "name": "Ben Rice",
-      "position_code": "3",
-      "jersey_number": "22",
-      "player_id": 700250,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "First Base"
-    },
-    {
-      "name": "Cody Bellinger",
+      "name": "Brandon Nimmo",
       "position_code": "7",
-      "jersey_number": "35",
-      "player_id": 641355,
+      "jersey_number": "9",
+      "player_id": 607043,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Left Field"
     },
     {
-      "name": "Austin Wells",
-      "position_code": "2",
-      "jersey_number": "28",
-      "player_id": 669224,
+      "name": "Jeff McNeil",
+      "position_code": "4",
+      "jersey_number": "1",
+      "player_id": 643446,
       "status": "Active",
       "batting_side": "L",
+      "defensive_position": "Second Base"
+    },
+    {
+      "name": "Cedric Mullins",
+      "position_code": "8",
+      "jersey_number": "28",
+      "player_id": 656775,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Center Field"
+    },
+    {
+      "name": "Ronny Mauricio",
+      "position_code": "5",
+      "jersey_number": "10",
+      "player_id": 677595,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Third Base"
+    },
+    {
+      "name": "Francisco Alvarez",
+      "position_code": "2",
+      "jersey_number": "4",
+      "player_id": 682626,
+      "status": "Active",
+      "batting_side": "R",
       "defensive_position": "Catcher"
+    },
+    {
+      "name": "Francisco Lindor",
+      "position_code": "6",
+      "jersey_number": "12",
+      "player_id": 596019,
+      "status": "Active",
+      "batting_side": "L",
+      "defensive_position": "Shortstop"
     }
   ],
   "available_roster": [
     {
-      "name": "J.C. Escarra",
+      "name": "Luis Torrens",
       "position_code": "2",
-      "jersey_number": "25",
-      "player_id": 641555,
-      "status": "Active",
-      "batting_side": "L",
-      "defensive_position": "Bench"
-    },
-    {
-      "name": "Giancarlo Stanton",
-      "position_code": "10",
-      "jersey_number": "27",
-      "player_id": 519317,
+      "jersey_number": "13",
+      "player_id": 620443,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"
     },
     {
-      "name": "Jasson Dom\u00ednguez",
-      "position_code": "7",
-      "jersey_number": "24",
-      "player_id": 691176,
+      "name": "Mark Vientos",
+      "position_code": "5",
+      "jersey_number": "27",
+      "player_id": 668901,
+      "status": "Active",
+      "batting_side": "R",
+      "defensive_position": "Bench"
+    },
+    {
+      "name": "Brett Baty",
+      "position_code": "5",
+      "jersey_number": "7",
+      "player_id": 683146,
       "status": "Active",
       "batting_side": "L",
       "defensive_position": "Bench"
     },
     {
-      "name": "Paul Goldschmidt",
-      "position_code": "3",
-      "jersey_number": "48",
-      "player_id": 502671,
+      "name": "Tyrone Taylor",
+      "position_code": "8",
+      "jersey_number": "15",
+      "player_id": 621438,
       "status": "Active",
       "batting_side": "R",
       "defensive_position": "Bench"
@@ -131,7 +131,7 @@
     "situation": "standard"
   },
   "team_info": {
-    "name": "New York Yankees",
-    "team_id": 147
+    "name": "New York Mets",
+    "team_id": 121
   }
 }

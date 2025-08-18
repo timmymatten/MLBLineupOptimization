@@ -1,9 +1,9 @@
 objective,initial_score,final_score,difference,percent_difference
 proper_leadoff,0.0,0.0,0.0,
-run_production_cascade,0.5,0.47,-0.030000000000000027,-6.000000000000005
-best_nine,0.857,0.283,-0.5740000000000001,-66.97782963827305
-proper_best_hitter,1.0,1.0,0.0,0.0
-proper_third_hitter,1.0,1.0,0.0,0.0
+run_production_cascade,0.2,0.1,-0.1,-50.0
+best_nine,0.148,0.052,-0.096,-64.86486486486487
+proper_best_hitter,0.0,0.0,0.0,
+proper_third_hitter,0.055999999999999994,0.0,-0.055999999999999994,-100.0
 proper_cleanup_hitter,0.0,0.0,0.0,
-proper_fifth_hitter,1.0,1.0,0.0,0.0
-TOTAL,4.357,3.753,-0.6040000000000001,-13.862749598347488
+proper_fifth_hitter,0.0,0.0,0.0,
+TOTAL,0.404,0.152,-0.252,-62.37623762376238
