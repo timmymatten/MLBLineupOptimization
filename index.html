@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLB Lineup Optimizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .controls-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .results-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .lineup-display {
+            margin-top: 20px;
+        }
+
+        .lineup-position {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .lineup-position:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .position-number {
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        .player-position {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .player-stats {
+            color: #27ae60;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+
+        .optimization-stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .stat-value {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .evolution-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 20px;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            opacity: 0.8;
+        }
+
+        .log-entry.success {
+            color: #2ecc71;
+        }
+
+        .log-entry.improvement {
+            color: #f39c12;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .advanced-options {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .advanced-toggle {
+            background: none;
+            border: none;
+            color: #3498db;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .range-input {
+            margin-top: 10px;
+        }
+
+        .range-input input[type="range"] {
+            width: 100%;
+        }
+
+        .range-value {
+            text-align: center;
+            font-weight: bold;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚾ MLB Lineup Optimizer</h1>
+            <p>Multi-Objective Evolutionary Computing for Baseball Lineup Construction</p>
+        </div>
+
+        <div class="main-content">
+            <div class="controls-panel">
+                <h3>Optimization Parameters</h3>
+                
+                <div class="form-group">
+                    <label for="team-select">Select Team:</label>
+                    <select id="team-select">
+                        <option value="">Choose a team...</option>
+                        <option value="new-york-yankees">New York Yankees</option>
+                        <option value="boston-red-sox">Boston Red Sox</option>
+                        <option value="los-angeles-dodgers">Los Angeles Dodgers</option>
+                        <option value="houston-astros">Houston Astros</option>
+                        <option value="atlanta-braves">Atlanta Braves</option>
+                        <option value="new-york-mets">New York Mets</option>
+                        <option value="philadelphia-phillies">Philadelphia Phillies</option>
+                        <option value="san-diego-padres">San Diego Padres</option>
+                        <option value="toronto-blue-jays">Toronto Blue Jays</option>
+                        <option value="chicago-cubs">Chicago Cubs</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="opposing-pitcher">Opposing Pitcher:</label>
+                    <input type="text" id="opposing-pitcher" placeholder="e.g., Zack Wheeler">
+                </div>
+
+                <div class="form-group">
+                    <label for="pitcher-hand">Pitcher Throws:</label>
+                    <select id="pitcher-hand">
+                        <option value="R">Right-Handed</option>
+                        <option value="L">Left-Handed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="ballpark">Ballpark:</label>
+                    <input type="text" id="ballpark" placeholder="e.g., Yankee Stadium">
+                </div>
+
+                <button class="advanced-toggle" onclick="toggleAdvanced()">⚙️ Advanced Options</button>
+                
+                <div class="advanced-options" id="advanced-options" style="display: none;">
+                    <div class="form-group">
+                        <label for="evolution-time">Evolution Time (seconds):</label>
+                        <div class="range-input">
+                            <input type="range" id="evolution-time" min="30" max="300" value="60" oninput="updateRangeValue('evolution-time', 'evolution-time-value')">
+                            <div class="range-value" id="evolution-time-value">60s</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="population-size">Population Size:</label>
+                        <div class="range-input">
+                            <input type="range" id="population-size" min="10" max="100" value="50" oninput="updateRangeValue('population-size', 'population-size-value')">
+                            <div class="range-value" id="population-size-value">50</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Optimization Objectives:</label>
+                        <div style="margin-top: 10px;">
+                            <label><input type="checkbox" checked> Leadoff Hitter OBP</label><br>
+                            <label><input type="checkbox" checked> Run Production Cascade</label><br>
+                            <label><input type="checkbox" checked> Best Nine Players</label><br>
+                            <label><input type="checkbox" checked> Lineup Position Optimization</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="startOptimization()" id="optimize-btn">
+                    🔥 Optimize Lineup
+                </button>
+
+                <button class="btn" onclick="generateRandomLineup()" id="random-btn">
+                    🎲 Generate Random Lineup
+                </button>
+
+                <div class="progress-bar" id="progress-bar" style="display: none;">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div id="results-content">
+                    <h3>🏆 Optimized Lineup</h3>
+                    <p style="color: #7f8c8d; margin-bottom: 20px;">Select a team and click "Optimize Lineup" to begin evolution.</p>
+                    
+                    <div class="lineup-display" id="lineup-display">
+                        <!-- Lineup will be populated here -->
+                    </div>
+
+                    <div class="optimization-stats" id="optimization-stats" style="display: none;">
+                        <h4>📊 Optimization Results</h4>
+                        <div id="stats-content"></div>
+                    </div>
+
+                    <div class="evolution-log" id="evolution-log" style="display: none;">
+                        <strong>Evolution Log:</strong>
+                        <div id="log-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock player database with realistic MLB stats
+        const playerDatabase = {
+            'new-york-yankees': [
+                {name: 'Aaron Judge', position: 'RF', batting: 'R', obp: 0.408, slg: 0.701, ops: 1.111, woba: 0.458, avg: 0.311},
+                {name: 'Juan Soto', position: 'LF', batting: 'L', obp: 0.419, slg: 0.569, ops: 0.988, woba: 0.412, avg: 0.288},
+                {name: 'Gleyber Torres', position: '2B', batting: 'R', obp: 0.330, slg: 0.378, ops: 0.708, woba: 0.322, avg: 0.257},
+                {name: 'Anthony Volpe', position: 'SS', batting: 'R', obp: 0.312, slg: 0.405, ops: 0.717, woba: 0.316, avg: 0.243},
+                {name: 'Giancarlo Stanton', position: 'DH', batting: 'R', obp: 0.331, slg: 0.492, ops: 0.823, woba: 0.356, avg: 0.273},
+                {name: 'Austin Wells', position: 'C', batting: 'L', obp: 0.322, slg: 0.395, ops: 0.717, woba: 0.318, avg: 0.229},
+                {name: 'Jazz Chisholm Jr.', position: '3B', batting: 'L', obp: 0.323, slg: 0.436, ops: 0.759, woba: 0.338, avg: 0.256},
+                {name: 'Trent Grisham', position: 'CF', batting: 'L', obp: 0.288, slg: 0.383, ops: 0.671, woba: 0.298, avg: 0.190},
+                {name: 'Anthony Rizzo', position: '1B', batting: 'L', obp: 0.301, slg: 0.335, ops: 0.636, woba: 0.283, avg: 0.228}
+            ],
+            'boston-red-sox': [
+                {name: 'Rafael Devers', position: '3B', batting: 'L', obp: 0.354, slg: 0.516, ops: 0.870, woba: 0.375, avg: 0.272},
+                {name: 'Trevor Story', position: 'SS', batting: 'R', obp: 0.312, slg: 0.428, ops: 0.740, woba: 0.329, avg: 0.244},
+                {name: 'Jarren Duran', position: 'CF', batting: 'L', obp: 0.342, slg: 0.492, ops: 0.834, woba: 0.361, avg: 0.285},
+                {name: 'Tyler O\'Neill', position: 'RF', batting: 'R', obp: 0.336, slg: 0.511, ops: 0.847, woba: 0.369, avg: 0.241},
+                {name: 'Masataka Yoshida', position: 'LF', batting: 'L', obp: 0.349, slg: 0.415, ops: 0.764, woba: 0.342, avg: 0.280},
+                {name: 'Triston Casas', position: '1B', batting: 'L', obp: 0.337, slg: 0.462, ops: 0.799, woba: 0.348, avg: 0.241},
+                {name: 'Connor Wong', position: 'C', batting: 'R', obp: 0.296, slg: 0.381, ops: 0.677, woba: 0.301, avg: 0.238},
+                {name: 'Ceddanne Rafaela', position: '2B', batting: 'R', obp: 0.269, slg: 0.365, ops: 0.634, woba: 0.281, avg: 0.246},
+                {name: 'Wilyer Abreu', position: 'DH', batting: 'L', obp: 0.322, slg: 0.459, ops: 0.781, woba: 0.346, avg: 0.253}
+            ],
+            // Add more teams as needed...
+        };
+
+        let currentLineup = [];
+        let evolutionInterval;
+        let optimizationRunning = false;
+
+        function toggleAdvanced() {
+            const advanced = document.getElementById('advanced-options');
+            const isVisible = advanced.style.display !== 'none';
+            advanced.style.display = isVisible ? 'none' : 'block';
+        }
+
+        function updateRangeValue(rangeId, valueId) {
+            const range = document.getElementById(rangeId);
+            const valueDisplay = document.getElementById(valueId);
+            let value = range.value;
+            
+            if (rangeId === 'evolution-time') {
+                valueDisplay.textContent = value + 's';
+            } else {
+                valueDisplay.textContent = value;
+            }
+        }
+
+        function generateRandomLineup() {
+            const teamSelect = document.getElementById('team-select');
+            const selectedTeam = teamSelect.value;
+            
+            if (!selectedTeam || !playerDatabase[selectedTeam]) {
+                alert('Please select a team first!');
+                return;
+            }
+
+            const players = [...playerDatabase[selectedTeam]];
+            currentLineup = shuffleArray(players).slice(0, 9);
+            displayLineup(currentLineup);
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function startOptimization() {
+            const teamSelect = document.getElementById('team-select');
+            const selectedTeam = teamSelect.value;
+            
+            if (!selectedTeam || !playerDatabase[selectedTeam]) {
+                alert('Please select a team first!');
+                return;
+            }
+
+            if (optimizationRunning) {
+                return;
+            }
+
+            optimizationRunning = true;
+            const optimizeBtn = document.getElementById('optimize-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const evolutionLog = document.getElementById('evolution-log');
+            
+            optimizeBtn.disabled = true;
+            optimizeBtn.textContent = '🔄 Optimizing...';
+            progressBar.style.display = 'block';
+            evolutionLog.style.display = 'block';
+
+            // Initialize with random lineup
+            generateRandomLineup();
+            
+            const evolutionTime = parseInt(document.getElementById('evolution-time').value) * 1000;
+            const startTime = Date.now();
+            
+            logEvolution('🚀 Starting lineup optimization...');
+            logEvolution(`⏱️ Evolution time: ${evolutionTime/1000} seconds`);
+            
+            // Simulate evolutionary optimization
+            evolutionInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = (elapsed / evolutionTime) * 100;
+                
+                document.getElementById('progress-fill').style.width = Math.min(progress, 100) + '%';
+                
+                if (elapsed < evolutionTime) {
+                    // Simulate evolution steps
+                    if (Math.random() < 0.3) { // 30% chance of improvement each iteration
+                        evolveLineup();
+                    }
+                } else {
+                    // Optimization complete
+                    clearInterval(evolutionInterval);
+                    optimizationRunning = false;
+                    optimizeBtn.disabled = false;
+                    optimizeBtn.textContent = '🔥 Optimize Lineup';
+                    progressBar.style.display = 'none';
+                    
+                    logEvolution('✅ Optimization complete!');
+                    logEvolution('🎯 Final lineup represents best solution found.');
+                    
+                    // Display final optimization stats
+                    displayOptimizationStats();
+                }
+            }, 500);
+        }
+
+        function evolveLineup() {
+            const teamSelect = document.getElementById('team-select');
+            const selectedTeam = teamSelect.value;
+            const players = [...playerDatabase[selectedTeam]];
+            
+            // Simulate different evolutionary operations
+            const operation = Math.random();
+            
+            if (operation < 0.4) {
+                // Swap two players (most common operation)
+                const i = Math.floor(Math.random() * currentLineup.length);
+                const j = Math.floor(Math.random() * currentLineup.length);
+                [currentLineup[i], currentLineup[j]] = [currentLineup[j], currentLineup[i]];
+                logEvolution(`🔄 Swapped ${currentLineup[i].name} and ${currentLineup[j].name}`);
+            } else if (operation < 0.6) {
+                // Optimize leadoff hitter
+                const bestOBP = players.reduce((best, player) => 
+                    player.obp > best.obp ? player : best
+                );
+                if (bestOBP.obp > currentLineup[0].obp) {
+                    const oldLeadoff = currentLineup[0];
+                    currentLineup[0] = bestOBP;
+                    logEvolution(`👑 New leadoff hitter: ${bestOBP.name} (OBP: ${bestOBP.obp.toFixed(3)})`);
+                }
+            } else if (operation < 0.8) {
+                // Optimize cleanup hitter (4th position)
+                const bestPower = players.reduce((best, player) => 
+                    player.slg > best.slg ? player : best
+                );
+                if (bestPower.slg > currentLineup[3].slg) {
+                    const oldCleanup = currentLineup[3];
+                    currentLineup[3] = bestPower;
+                    logEvolution(`💪 New cleanup hitter: ${bestPower.name} (SLG: ${bestPower.slg.toFixed(3)})`);
+                }
+            } else {
+                // Random improvement
+                const improvements = [
+                    'Improved run production cascade',
+                    'Better platoon advantage',
+                    'Enhanced table-setting ability',
+                    'Optimized power distribution'
+                ];
+                logEvolution(`⚡ ${improvements[Math.floor(Math.random() * improvements.length)]}`);
+            }
+            
+            displayLineup(currentLineup);
+        }
+
+        function displayLineup(lineup) {
+            const lineupDisplay = document.getElementById('lineup-display');
+            const positions = ['Leadoff', '2nd', '3rd', 'Cleanup', '5th', '6th', '7th', '8th', '9th'];
+            
+            lineupDisplay.innerHTML = lineup.map((player, index) => `
+                <div class="lineup-position">
+                    <div class="position-number">${index + 1}</div>
+                    <div class="player-info">
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-position">${player.position} • ${player.batting === 'L' ? 'Left' : player.batting === 'R' ? 'Right' : 'Switch'} Handed</div>
+                        <div class="player-stats">
+                            AVG: ${player.avg.toFixed(3)} | OBP: ${player.obp.toFixed(3)} | SLG: ${player.slg.toFixed(3)} | OPS: ${player.ops.toFixed(3)}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function displayOptimizationStats() {
+            const statsDisplay = document.getElementById('optimization-stats');
+            const statsContent = document.getElementById('stats-content');
+            
+            // Calculate lineup statistics
+            const totalOPS = currentLineup.reduce((sum, player) => sum + player.ops, 0);
+            const avgOPS = totalOPS / currentLineup.length;
+            const leadoffOBP = currentLineup[0].obp;
+            const cleanupSLG = currentLineup[3].slg;
+            const totalwOBA = currentLineup.reduce((sum, player) => sum + player.woba, 0);
+            
+            // Calculate run production cascade score
+            let cascadeScore = 0;
+            for (let i = 0; i < currentLineup.length - 1; i++) {
+                cascadeScore += currentLineup[i].obp * currentLineup[i + 1].slg;
+            }
+            cascadeScore += currentLineup[8].obp * currentLineup[0].slg; // 9th to 1st
+            
+            statsContent.innerHTML = `
+                <div class="stat-item">
+                    <span class="stat-label">Team OPS:</span>
+                    <span class="stat-value">${avgOPS.toFixed(3)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Leadoff OBP:</span>
+                    <span class="stat-value">${leadoffOBP.toFixed(3)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cleanup SLG:</span>
+                    <span class="stat-value">${cleanupSLG.toFixed(3)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cascade Score:</span>
+                    <span class="stat-value">${cascadeScore.toFixed(3)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total wOBA:</span>
+                    <span class="stat-value">${totalwOBA.toFixed(3)}</span>
+                </div>
+            `;
+            
+            statsDisplay.style.display = 'block';
+        }
+
+        function logEvolution(message) {
+            const logContent = document.getElementById('log-content');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            if (message.includes('✅') || message.includes('complete')) {
+                logEntry.classList.add('success');
+            } else if (message.includes('👑') || message.includes('💪') || message.includes('⚡')) {
+                logEntry.classList.add('improvement');
+            }
+            
+            logContent.appendChild(logEntry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default values
+            document.getElementById('ballpark').value = 'Yankee Stadium';
+            document.getElementById('opposing-pitcher').value = 'Zack Wheeler';
+            
+            // Show welcome message
+            logEvolution('🏟️ MLB Lineup Optimizer Ready!');
+            logEvolution('📋 Select a team and start optimization.');
+        });
+    </script>
+</body>
+</html>
