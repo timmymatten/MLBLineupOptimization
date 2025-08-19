@@ -4,6 +4,8 @@ A multi-objective evolutionary computing framework for optimizing Major League B
 
 ## Project Overview
 
+[https://timmymatten.github.io/MLBLineupOptimization/]
+
 [Daily Log for this Prpject](log.md)
 
 This project uses evolutionary algorithms to find optimal MLB starting lineups by balancing multiple competing objectives. Rather than simply sorting players by individual statistics, the system considers strategic lineup construction principles like run production cascades, proper leadoff characteristics, and player synergies.
