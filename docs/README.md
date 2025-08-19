@@ -188,7 +188,7 @@ The system generates comprehensive results:
 - **best_solution.json**: Optimized lineup with full player details
 - **evolution_scores.csv**: Complete scoring history for all generated solutions
 - **score_differences.csv**: Detailed improvement analysis comparing initial vs. final lineups  
-- **objective_scores_*.png**: Visualization of objective function performance
+- **objective_scores_chart.png**: Visualization of objective function performance
 - **Console Output**: Real-time progress bar and evolution statistics
 
 ## Development Timeline
