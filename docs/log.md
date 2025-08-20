@@ -247,3 +247,11 @@ solution = {
 
 - created get_pitcher_vs_hitter_stats() in api.py
 - need to edit best_nine objective to consider opposing pitcher, rename to best_nine_vs_p()
+
+## August 2_, 2025 (Day 18)
+
+*Tasks*
+
+- need to edit best_nine objective to consider opposing pitcher, rename to best_nine_vs_p()
+- handedness objective
+- objective weights? (handedness objective less weight, lineup spot objectives more weight)
