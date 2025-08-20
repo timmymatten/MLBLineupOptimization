@@ -12,18 +12,6 @@ def ba_unsorted(L):
         if api.get_stats(x['name'], 'AVG') < api.get_stats(y['name'], 'AVG')
     ), 3)
 
-def proper_leadoff(L):
-    lineup = L['lineup']
-    leadoff_hitter = lineup[0]
-    leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
-    
-    if leadoff_obp >= 0.310:
-        return 0
-    else:
-        # Return penalty proportional to how far from ideal
-        penalty = (0.310 - leadoff_obp) * 10  # Scale for visibility
-        return penalty
-
 def run_production_cascade(L):
     """
     Objective function: Run Production Cascade (Minimization)
@@ -109,6 +97,18 @@ def best_nine(L):
                     continue
 
     return round(penalty, 3)
+
+def proper_leadoff(L):
+    lineup = L['lineup']
+    leadoff_hitter = lineup[0]
+    leadoff_obp = api.get_stats(leadoff_hitter['name'], 'OBP')
+    
+    if leadoff_obp >= 0.310:
+        return 0
+    else:
+        # Return penalty proportional to how far from ideal
+        penalty = (0.310 - leadoff_obp) * 10  # Scale for visibility
+        return penalty
 
 def proper_best_hitter_second(L):
     lineup = L['lineup']

@@ -235,3 +235,76 @@ class MLBStatsAPI:
 
         return solution
  
+    def get_pitcher_vs_hitter_stats(self, hitter_name, pitcher_name, stat):
+        """
+        Get career statistics for a hitter against a particular pitcher using MLB Stats API.
+        
+        Args:
+            hitter_name (str): Name of the hitter
+            pitcher_name (str): Name of the pitcher
+            stat (str): The statistic to retrieve (e.g., 'AVG', 'OBP', 'SLG', 'OPS')
+        
+        Returns:
+            float: The requested statistic value, or None if not available
+        """
+        
+        try:
+            # Get player IDs
+            hitter_id = self.get_player_id(hitter_name)
+            pitcher_id = self.get_player_id(pitcher_name)
+            
+            # Convert to int to avoid numpy type issues
+            hitter_id = int(hitter_id)
+            pitcher_id = int(pitcher_id)
+            
+            # Use vsPlayer without season parameter for career stats
+            url = f"{self.base_url}/people/{hitter_id}/stats"
+            params = {
+                'stats': 'vsPlayer',
+                'opposingPlayerId': pitcher_id,
+                'group': 'hitting'
+            }
+            
+            response = requests.get(url, params=params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                # Parse the response to extract the stat
+                if 'stats' in data and len(data['stats']) > 0:
+                    # Check all stat groups (API might return multiple)
+                    for stats_group in data['stats']:
+                        if 'splits' in stats_group and len(stats_group['splits']) > 0:
+                            split_stats = stats_group['splits'][0]['stat']
+                            
+                            # Map common stat names to API field names
+                            stat_mapping = {
+                                'AVG': 'avg',
+                                'OBP': 'obp',
+                                'SLG': 'slg',
+                                'OPS': 'ops',
+                                'HR': 'homeRuns',
+                                'RBI': 'rbi',
+                                'BB': 'baseOnBalls',
+                                'SO': 'strikeOuts',
+                                'H': 'hits',
+                                'AB': 'atBats',
+                                'PA': 'plateAppearances',
+                                '2B': 'doubles',
+                                '3B': 'triples',
+                                'GDP': 'groundIntoDoublePlay',
+                                'HBP': 'hitByPitch',
+                                'BABIP': 'babip',
+                                'TB': 'totalBases',
+                                'LOB': 'leftOnBase'
+                            }
+                            
+                            api_stat_name = stat_mapping.get(stat.upper(), stat.lower())
+                            
+                            if api_stat_name in split_stats:
+                                return float(split_stats[api_stat_name])
+        
+        except Exception as e:
+            print(f"Error fetching {hitter_name} vs {pitcher_name} stats: {e}")
+        
+        return None

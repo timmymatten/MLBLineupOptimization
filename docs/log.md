@@ -114,6 +114,8 @@ solution = {
 - fix main.py to incorporate new solution format
 - make init sol faster
 
+*Log*
+
 - main now works with new dict structure for solutions
 - made main write the best solution to a file
 - had to fix some errors like returning dictionaries rather than list and other dict/list issues
@@ -147,6 +149,8 @@ solution = {
 - this could be done by making an overal function that checks for available players in a given group of players...
 - e.g. the function could take in the bench players and check if there is a player worthy of being in the lineup
 
+*Log*
+
 - realized i cn make an agent whose job it is to find better players on the bench
 - easier and more effective than altering the existing agents to do more work than necessary
 
@@ -160,6 +164,8 @@ solution = {
 - document score differences from init and final
 - add a chart to results
 
+*Log*
+
 - added chart to results, to fix/improve later
 
 ## August 5, 2025 (Day 12)
@@ -169,6 +175,8 @@ solution = {
 - document score differences from init and final
 - improve chart
 - start improving agents and objectives
+
+*Log*
 
 - organized directory to split up main(), objectives, and agents into separate files
 - added progress bar to see evolution progress
@@ -180,6 +188,8 @@ solution = {
 
 - improve chart
 - start improving agents and objectives
+
+*Log*
 
 - improved score diff documentation for results
 
@@ -202,6 +212,8 @@ solution = {
 - create objective function for hitter handedness vs x-handed pitcher
 - create agent for each of those objectives
 
+*Log*
+
 - created objectives for 1-5 hitters
 - cretaed agents for 1-2 hitters
 
@@ -215,3 +227,23 @@ solution = {
 
 - finish lineup position objectives
 - opposing pitcher objectives
+
+## August 19, 2025 (Day 17)
+
+*Tasks*
+
+- add opposing pitcher consideration into optimization
+- create api function to get batter vs hitter stats
+- create objective function for hitter stats vs pitcher
+- create objective function for hitter handedness vs x-handed pitcher
+- create agent for each of those objectives
+
+- finish lineup position objectives
+
+- ONLY 65 ITERATIONS WHEN TIME LIMIT IS 60s (ABOUT 90 SECONDS TOTAL RUNTIME)
+- MUST REDUCE TIME/ITERATION
+
+*Log*
+
+- created get_pitcher_vs_hitter_stats() in api.py
+- need to edit best_nine objective to consider opposing pitcher, rename to best_nine_vs_p()
